@@ -4,6 +4,11 @@ import { Layout } from '../components/Layout'
 import { Home } from '../pages/Home'
 import { Error404 } from '../pages/Error404'
 import Contacto from '../pages/Contacto'
+import { Login } from '../pages/Login'
+import { Catalogo } from '../pages/Catalogo'
+import { Nosotros } from '../pages/Nosotros'
+import { RegistroUsuario } from '../pages/RegistroUsuario'
+import { Carrito } from '../pages/Carrito'
 
 export const RoutesComp = () => {
     return (
@@ -15,8 +20,11 @@ export const RoutesComp = () => {
                         <Route path='/' element={<Navigate to='/home' />} /> {/*Cada vez que se entra a la raíz redirige a Home*/}
                         <Route path='/home' element={<Home />} />
                         <Route path='/contacto' element={<Contacto />} />
-
-
+                        <Route path='/login' element={<Login />} />
+                        <Route path='/catalogo' element={<Catalogo />} />
+                        <Route path='/nosotros' element={<Nosotros />} />
+                        <Route path='/registroUsuario' element={<RegistroUsuario />} />
+                        <Route path='/carrito' element={<Carrito />} />
                     </Route>
 
                 </Routes>

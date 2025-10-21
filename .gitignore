@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# en la raíz del proyecto , Ignorar carpeta de reportes de cobertura
+coverage/
+
