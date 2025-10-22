@@ -1,4 +1,6 @@
-import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { NavLink } from "react-router-dom";
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import React from "react";
 
 export default function NavbarMS() {
   return (
@@ -15,7 +17,10 @@ export default function NavbarMS() {
             <Nav.Link href="/catalogo">Catálogo</Nav.Link>
             <Nav.Link href="/nosotros">Nosotros</Nav.Link>
             <Nav.Link href="/contacto">Contacto</Nav.Link>
-            <Nav.Link href="/registro">Registro</Nav.Link>
+          <NavLink to="/registroUsuario" className="nav-link">Registro</NavLink>
+
+
+
             <Nav.Link href="/login">Login</Nav.Link>
             <Button as="a" href="/carrito" variant="outline-dark" size="sm">
               🛒 Carrito
