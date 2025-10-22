@@ -25,7 +25,6 @@ const Login = () => {
   return (
     <main
       className="login-container d-flex align-items-center justify-content-center min-vh-100"
-      style={{ backgroundColor: "#FFF5E1", fontFamily: "Lato, sans-serif" }}
     >
       <div
         className="login-card p-4 shadow rounded"
