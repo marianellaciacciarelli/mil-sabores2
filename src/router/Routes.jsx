@@ -7,7 +7,7 @@ import Contacto from '../pages/Contacto'
 import  Login  from '../pages/Login'
 import { Catalogo } from '../pages/Catalogo'
 import { Nosotros } from '../pages/Nosotros'
-import { RegistroUsuario } from '../pages/RegistroUsuario'
+
 import { Carrito } from '../pages/Carrito'
 import Checkout from '../pages/Checkout'
 import Productos from '../pages/Productos'
@@ -17,6 +17,8 @@ import CompraExitosa from '../pages/CompraExitosa'
 import Ofertas from '../pages/Ofertas'
 import InicioSesion from '../pages/InicioSesion'
 import CompraFallida from '../pages/CompraFallida'
+
+import RegistroUsuario from "../pages/RegistroUsuario.jsx";
 
 
 export const RoutesComp = () => {
@@ -32,7 +34,7 @@ export const RoutesComp = () => {
                         <Route path='/login' element={<Login />} />
                         <Route path='/catalogo' element={<Catalogo />} />
                         <Route path='/nosotros' element={<Nosotros />} />
-                        <Route path='/registroUsuario' element={<RegistroUsuario />} />
+                       <Route path="/registro-usuario" element={<RegistroUsuario />} />
                         <Route path='/carrito' element={<Carrito />} />
                         <Route path='/productos' element={<Productos />} />
                         <Route path="/checkout" element={<Checkout />} />
