@@ -4,12 +4,19 @@ import { Layout } from '../components/Layout'
 import  Home from '../pages/Home'
 import { Error404 } from '../pages/Error404'
 import Contacto from '../pages/Contacto'
-import { Login } from '../pages/Login'
+import  Login  from '../pages/Login'
 import { Catalogo } from '../pages/Catalogo'
 import { Nosotros } from '../pages/Nosotros'
 import { RegistroUsuario } from '../pages/RegistroUsuario'
 import { Carrito } from '../pages/Carrito'
 import Checkout from '../pages/Checkout'
+import Productos from '../pages/Productos'
+import Categoria from '../pages/Categoria'
+import Blog from '../pages/Blog'
+import CompraExitosa from '../pages/CompraExitosa'
+import Ofertas from '../pages/Ofertas'
+import InicioSesion from '../pages/InicioSesion'
+import CompraFallida from '../pages/CompraFallida'
 
 
 export const RoutesComp = () => {
@@ -27,8 +34,15 @@ export const RoutesComp = () => {
                         <Route path='/nosotros' element={<Nosotros />} />
                         <Route path='/registroUsuario' element={<RegistroUsuario />} />
                         <Route path='/carrito' element={<Carrito />} />
-
+                        <Route path='/productos' element={<Productos />} />
                         <Route path="/checkout" element={<Checkout />} />
+                        <Route path="/categoria" element={<Categoria />} />
+                        <Route path="/blog" element={<Blog />} />
+                        <Route path="/compraExitosa" element={<CompraExitosa />} />
+                        <Route path="/ofertas" element={<Ofertas />} />
+                        <Route path="/inicioSesion" element={<InicioSesion />} />
+                        <Route path="/compraFallida" element={<CompraFallida />} />
+                        
                     </Route>
 
                 </Routes>
