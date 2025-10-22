@@ -12,7 +12,7 @@ export default function Home() {
         <img
           src="/img/logo.png"
           alt="Logo"
-          style={{ maxWidth: 250, width: '100%', height: 'auto', marginBottom: 20 }}
+          style={{ maxWidth: 350, width: '100%', height: 'auto', marginBottom: 20 }}
         />
         <h1 className="display-4 brand-script">Celebra la dulzura de la vida</h1>
         <p className="lead">Pastelería 1000 Sabores — 50 años de tradición</p>
