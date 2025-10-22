@@ -23,7 +23,6 @@ const Login = () => {
     <main
       className="d-flex align-items-center justify-content-center min-vh-100"
       style={{
-        backgroundColor: "#FFF5E1",
         fontFamily: "Lato, sans-serif",
       }}
     >
