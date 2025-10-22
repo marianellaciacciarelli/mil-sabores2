@@ -1,40 +1,32 @@
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink } from "react-router-dom";
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import React from "react";
 
+export default function NavbarMS() {
+  return (
+    <Navbar expand="lg" className="navbar-ms shadow-soft">
+      <Container>
+        <Navbar.Brand href="/home" className="fw-bold brand-script">
+          🍰 Pastelería 1000 Sabores
+        </Navbar.Brand>
 
-export default function Navbar() {
-    return (
-        <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: '#FFC0CB' }}>
-            <div className="container-fluid">
-                <Link to="/" className="navbar-brand fw-bold" style={{ color: '#8B4513' }}>
-                    🍰 Pastelería 1000 Sabores
-                </Link>
-                <button
-                    className="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav"
-                    aria-controls="navbarNav"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                >
-                    <span className="navbar-toggler-icon" />
-                </button>
-
-
-                <div className="collapse navbar-collapse" id="navbarNav">
-                    <ul className="navbar-nav ms-auto">
-                        <li className="nav-item"><NavLink end to="/" className="nav-link">Inicio</NavLink></li>
-                        <li className="nav-item"><NavLink to="/catalogo" className="nav-link">Catálogo</NavLink></li>
-                        <li className="nav-item"><NavLink to="/nosotros" className="nav-link">Nosotros</NavLink></li>
-                        <li className="nav-item"><NavLink to="/contacto" className="nav-link">Contacto</NavLink></li>
-                        <li className="nav-item"><NavLink to="/registro-usuario" className="nav-link">Registro</NavLink></li>
-                        <li className="nav-item"><NavLink to="/login" className="nav-link">Login</NavLink></li>
-                        <li className="nav-item">
-                            <NavLink to="/carrito" className="btn btn-sm btn-outline-dark">🛒 Carrito</NavLink>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    )
+        <Navbar.Toggle aria-controls="nav" />
+        <Navbar.Collapse id="nav">
+          <Nav className="ms-auto align-items-lg-center gap-2">
+            <Nav.Link href="/home">Inicio</Nav.Link>
+            <Nav.Link href="/nosotros">Nosotros</Nav.Link>
+            <Nav.Link href="/catalogo">Catálogo</Nav.Link>
+            <Nav.Link href="/ofertas">Ofertas</Nav.Link>
+            <Nav.Link href="/contacto">Contacto</Nav.Link>
+            <Nav.Link href="/login">Login</Nav.Link>
+            <Nav.Link href="/registrousuario">Registro</Nav.Link>
+            <Nav.Link href="/blog">Blog</Nav.Link>
+            <Button as="a" href="/carrito" variant="outline-dark" size="sm">
+              🛒 Carrito
+            </Button>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
 }

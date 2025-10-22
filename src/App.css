@@ -1,0 +1,250 @@
+/* ================== THEME GLOBAL ================== */
+:root{
+  --cream:#FFF5E1;      /* fondo cálido */
+  --pink:#FFC0CB;       /* acentos */
+  --choco:#8B4513;      /* títulos/brand */
+  --text:#5D4037;       /* texto principal */
+}
+
+/* Tipografías: agrega los <link> en index.html (Google Fonts) */
+body{
+  background-color: var(--cream);
+  color: var(--text);
+  font-family: 'Lato', system-ui, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-family: 'Pacifico', cursive;
+  color: var(--text);
+}
+
+/* Utilidades de color/fondo */
+.bg-rosa-suave{ background-color: var(--pink) !important; }
+.bg-chocolate{ background-color: var(--choco) !important; color: var(--cream) !important; }
+.bg-crema-pastel{ background-color: var(--cream) !important; }
+.text-choco{ color: var(--choco) !important; }
+
+.d-none{ display:none !important; } /* por compatibilidad con tu código anterior */
+
+/* ================== FORMULARIOS ================== */
+form label{
+  font-weight: 600;
+  margin-bottom: .3rem;
+  display: block;
+  color: var(--text);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea{
+  width: 100%;
+  padding: .5rem;
+  border: 2px solid var(--choco);
+  border-radius: 5px;
+  font-family: 'Lato', system-ui, sans-serif;
+  font-size: 1rem;
+  color: var(--text);
+  background-color: var(--cream);
+  margin-bottom: 1rem;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus{
+  outline: none;
+  border-color: var(--pink);
+  background-color: #fff0f6; /* rosado muy claro */
+}
+
+/* Botón tipo "button" de tu proyecto anterior */
+button.button{
+  background-color: var(--pink);
+  border: none;
+  color: var(--choco);
+  padding: .6rem 1.3rem;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color .3s ease;
+  width: 100%;
+}
+button.button:hover,
+button.button:focus{
+  background-color: var(--choco);
+  color: var(--cream);
+  outline: none;
+}
+
+/* Contenedor de ancho limitado (útil para formularios) */
+.container-custom{
+  max-width: 900px;
+  margin: 2rem auto;
+}
+
+.success-msg{
+  width: 100%;
+  padding: .5rem;
+  border: 2px solid var(--choco);
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #155724;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* ================== NAVBAR (evitar choques con Bootstrap) ================== */
+.navbar-ms{
+  background: var(--pink);
+  padding: .5rem 0;
+}
+.navbar-ms .navbar-brand{
+  color: var(--choco) !important;
+  font-weight: 700;
+}
+.navbar-ms .nav-link{
+  color: var(--text) !important;
+  font-weight: 600;
+}
+.navbar-ms .nav-link:hover,
+.navbar-ms .nav-link:focus{
+  color: var(--choco) !important;
+}
+
+/* Si sigues usando tu navbar “manual” anterior, usa estas: */
+.nav-ms-container{
+  background-color: var(--pink);
+  padding: .5rem 1rem;
+  border-radius: 5px;
+  max-width: 900px;
+  margin: 1rem auto;
+}
+.nav-ms-list{
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 0; padding: 0;
+}
+.nav-ms-link{
+  color: var(--choco);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: .3rem .6rem;
+  border-radius: 5px;
+  transition: background-color .3s ease, color .3s ease;
+}
+.nav-ms-link:hover,
+.nav-ms-link:focus{
+  background-color: var(--choco);
+  color: var(--cream);
+  outline: none;
+}
+
+/* ================== HOME ================== */
+.hero{ background: var(--cream); padding: 3rem 0; }
+.hero-title{ color: var(--choco); }
+
+.card-hover{ transition: transform .2s, box-shadow .2s; }
+.card-hover:hover{ transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,.12); }
+
+.shadow-soft{ box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+.round-2xl{ border-radius: 16px; }
+
+/* ================== FOOTER pegado abajo ================== */
+footer{ margin-top: auto; }
+.footer{ background: var(--cream); color: var(--text); padding: 1.25rem 0; }
+
+/* ================== PÁGINA REGISTRO (fondo con imagen) ================== */
+/* Usar en un <div class="body-registro"> dentro de la página Registro */
+.body-registro{
+  background-image: url('/img/fondo-pasteles.png'); /* poner archivo en public/img */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+}
+html, body, #root {
+  height: 100%;
+}
+
+.app {
+  min-height: 100dvh;     /* o 100vh, ambas sirven */
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;         /* hace que el contenido empuje el footer */
+}
+
+footer {
+  margin-top: auto;       /* el footer se queda abajo */
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+
+
+html, body, #root { height: 100%; }   /* #root es donde React monta todo */
+
+.app{
+  min-height: 100dvh;                 /* alto de pantalla */
+  display: flex;
+  flex-direction: column;             /* columna: navbar / contenido / footer */
+}
+
+.page-content{
+  flex: 1 0 auto;                     /* empuja el footer hacia abajo */
+}
+
+/* por si acaso */
+footer{ margin-top: auto; }
+
+body {
+  background-image: url('/img/fondo-pasteles.png');
+  background-size: cover;           /* cubre toda la pantalla */
+  background-repeat: no-repeat;
+  background-attachment: fixed;     /* se queda quieto al hacer scroll */
+  background-position: center;
+  color: var(--text);
+}
+
+/* ===== ESTILOS DE OFERTAS Y BOTONES ===== */
+.price-old {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 0.95rem;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.price-new {
+  color: #28a745;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.btn-rosa {
+  background-color: var(--pink);
+  color: var(--choco);
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  transition: all 0.3s ease;
+}
+.btn-rosa:hover {
+  background-color: var(--choco);
+  color: var(--cream);
+}

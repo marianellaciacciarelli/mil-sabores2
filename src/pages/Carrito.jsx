@@ -1,4 +1,5 @@
 import React from "react";
+import Footer from '../components/Footer';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export const Carrito = () => {
@@ -195,12 +196,6 @@ export const Carrito = () => {
         </div>
       </main>
 
-      <footer
-        className="text-center p-4 bg-rosa-suave mt-5"
-        style={{ backgroundColor: "#FFC0CB" }}
-      >
-        © 2025 Pastelería 1000 Sabores — Todos los derechos reservados
-      </footer>
     </div>
   );
 };

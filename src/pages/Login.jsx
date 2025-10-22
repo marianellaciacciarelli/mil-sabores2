@@ -1,38 +1,39 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ navegación SPA
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Login = () => {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const navigate = useNavigate(); // ✅ hook de React Router
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (usuario === "admin" && password === "1234") {
       setMensaje("🎉 Inicio de sesión exitoso. Bienvenido a Pastelería 1000 Sabores!");
+      // Redirige al registro después de 1 segundo
+      setTimeout(() => navigate("/catalogo", { state: { usuarioFromLogin: usuario } }), 1000);
     } else {
       setMensaje("❌ Usuario o contraseña incorrectos.");
     }
+
     setTimeout(() => setMensaje(""), 3000);
-    setUsuario("");
-    setPassword("");
   };
 
   return (
     <main
-      className="d-flex align-items-center justify-content-center min-vh-100"
-      style={{
-        backgroundColor: "#FFF5E1",
-        fontFamily: "Lato, sans-serif",
-      }}
+      className="login-container d-flex align-items-center justify-content-center min-vh-100"
     >
       <div
-        className="p-4 shadow rounded"
+        className="login-card p-4 shadow rounded"
         style={{
           backgroundColor: "white",
-          width: "100%",
           maxWidth: "400px",
+          width: "100%",
           borderRadius: "12px",
+          color: "#5D4037",
         }}
       >
         <h2
@@ -41,42 +42,55 @@ const Login = () => {
         >
           Iniciar Sesión 🍰
         </h2>
+
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label fw-bold">Usuario</label>
-            <input
-              type="text"
-              className="form-control"
-              value={usuario}
-              onChange={(e) => setUsuario(e.target.value)}
-              placeholder="Ingresa tu usuario"
-              required
-            />
-          </div>
+          <label className="fw-bold">Usuario</label>
+          <input
+            type="text"
+            className="form-control mb-3"
+            value={usuario}
+            onChange={(e) => setUsuario(e.target.value)}
+            placeholder="Ingresa tu usuario"
+            required
+          />
 
-          <div className="mb-3">
-            <label className="form-label fw-bold">Contraseña</label>
-            <input
-              type="password"
-              className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Ingresa tu contraseña"
-              required
-            />
-          </div>
+          <label className="fw-bold">Contraseña</label>
+          <input
+            type="password"
+            className="form-control mb-3"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Ingresa tu contraseña"
+            required
+          />
 
+          {/* Botón de inicio de sesión */}
           <button
             type="submit"
-            className="btn w-100"
+            className="btn w-100 mb-3"
             style={{
-              backgroundColor: "#F9A826",
+              backgroundColor: "#FFC0CB",
               color: "white",
               fontWeight: "bold",
               borderRadius: "8px",
             }}
           >
             Entrar 🔐
+          </button>
+
+          {/* Botón que navega a Registro sin recargar */}
+          <button
+            type="button"
+            className="btn w-100"
+            onClick={() => navigate("/registro", { state: { usuarioFromLogin: usuario } })}
+            style={{
+              backgroundColor: "#FFC0CB",
+              color: "white",
+              fontWeight: "bold",
+              borderRadius: "8px",
+            }}
+          >
+            Registrar 🧁
           </button>
         </form>
 
