@@ -218,3 +218,33 @@ body {
   background-position: center;
   color: var(--text);
 }
+
+/* ===== ESTILOS DE OFERTAS Y BOTONES ===== */
+.price-old {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 0.95rem;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.price-new {
+  color: #28a745;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.btn-rosa {
+  background-color: var(--pink);
+  color: var(--choco);
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  transition: all 0.3s ease;
+}
+.btn-rosa:hover {
+  background-color: var(--choco);
+  color: var(--cream);
+}
