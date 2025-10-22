@@ -209,3 +209,12 @@ html, body, #root { height: 100%; }   /* #root es donde React monta todo */
 
 /* por si acaso */
 footer{ margin-top: auto; }
+
+body {
+  background-image: url('/img/fondo-pasteles.png');
+  background-size: cover;           /* cubre toda la pantalla */
+  background-repeat: no-repeat;
+  background-attachment: fixed;     /* se queda quieto al hacer scroll */
+  background-position: center;
+  color: var(--text);
+}
