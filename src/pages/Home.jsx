@@ -2,6 +2,7 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import NavbarMS from '../components/Navbar';
 import Footer from '../components/Footer';
 
+
 export default function Home() {
   return (
     <>
