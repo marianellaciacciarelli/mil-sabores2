@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import { Layout } from '../components/Layout'
-import { Home } from '../pages/Home'
+import  Home from '../pages/Home'
 import { Error404 } from '../pages/Error404'
 import Contacto from '../pages/Contacto'
 import { Login } from '../pages/Login'
@@ -9,6 +9,8 @@ import { Catalogo } from '../pages/Catalogo'
 import { Nosotros } from '../pages/Nosotros'
 import { RegistroUsuario } from '../pages/RegistroUsuario'
 import { Carrito } from '../pages/Carrito'
+import Checkout from '../pages/Checkout'
+
 
 export const RoutesComp = () => {
     return (
@@ -25,6 +27,8 @@ export const RoutesComp = () => {
                         <Route path='/nosotros' element={<Nosotros />} />
                         <Route path='/registroUsuario' element={<RegistroUsuario />} />
                         <Route path='/carrito' element={<Carrito />} />
+
+                        <Route path="/checkout" element={<Checkout />} />
                     </Route>
 
                 </Routes>
