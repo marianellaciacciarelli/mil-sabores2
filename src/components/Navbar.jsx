@@ -13,10 +13,12 @@ export default function NavbarMS() {
           <Nav className="ms-auto align-items-lg-center gap-2">
             <Nav.Link href="/home">Inicio</Nav.Link>
             <Nav.Link href="/catalogo">Catálogo</Nav.Link>
+            <Nav.Link href="/ofertas">Ofertas</Nav.Link>
             <Nav.Link href="/nosotros">Nosotros</Nav.Link>
             <Nav.Link href="/contacto">Contacto</Nav.Link>
-            <Nav.Link href="/registro">Registro</Nav.Link>
+            <Nav.Link href="/registrousuario">Registro</Nav.Link>
             <Nav.Link href="/login">Login</Nav.Link>
+            <Nav.Link href="/blog">Blog</Nav.Link>
             <Button as="a" href="/carrito" variant="outline-dark" size="sm">
               🛒 Carrito
             </Button>

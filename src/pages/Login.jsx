@@ -31,7 +31,7 @@ const Login = () => {
         style={{
           backgroundColor: "white",
           width: "100%",
-          maxWidth: "400px",
+          maxWidth: "500px",
           borderRadius: "12px",
         }}
       >
@@ -70,13 +70,27 @@ const Login = () => {
             type="submit"
             className="btn w-100"
             style={{
-              backgroundColor: "#F9A826",
+              backgroundColor: "#FFC0CB",
               color: "white",
               fontWeight: "bold",
               borderRadius: "8px",
             }}
           >
             Entrar 🔐
+          </button>
+
+          <button
+      
+            type="submit"
+            className="btn w-100"
+            style={{
+              backgroundColor: "#FFC0CB",
+              color: "white",
+              fontWeight: "bold",
+              borderRadius: "8px",
+            }}
+          >
+            Registrar 
           </button>
         </form>
 
