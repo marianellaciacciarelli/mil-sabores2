@@ -18,7 +18,9 @@ import Ofertas from '../pages/Ofertas'
 import InicioSesion from '../pages/InicioSesion'
 import CompraFallida from '../pages/CompraFallida'
 
-import RegistroUsuario from "../pages/RegistroUsuario.jsx";
+import RegistroUsuario from '../pages/RegistroUsuario.jsx';
+
+
 
 
 export const RoutesComp = () => {
@@ -34,7 +36,8 @@ export const RoutesComp = () => {
                         <Route path='/login' element={<Login />} />
                         <Route path='/catalogo' element={<Catalogo />} />
                         <Route path='/nosotros' element={<Nosotros />} />
-                       <Route path="/registro-usuario" element={<RegistroUsuario />} />
+                       <Route path="/registroUsuario" element={<RegistroUsuario />} />
+
                         <Route path='/carrito' element={<Carrito />} />
                         <Route path='/productos' element={<Productos />} />
                         <Route path="/checkout" element={<Checkout />} />
