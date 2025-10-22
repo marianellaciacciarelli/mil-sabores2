@@ -85,23 +85,7 @@ export const Nosotros = () => {
         />
       </section>
 
-      <footer
-        className="text-center p-4 mt-5"
-        style={{ backgroundColor: "#FFC0CB" }}
-      >
-        <p>
-          Síguenos en{" "}
-          <a href="#" style={{ color: "#8B4513" }}>
-            Facebook
-          </a>{" "}
-          |{" "}
-          <a href="#" style={{ color: "#8B4513" }}>
-            Instagram
-          </a>
-        </p>
-        <p>❤️ ¡Celebra la dulzura de la vida con Pastelería 1000 Sabores! ❤️</p>
-        © 2025 Pastelería 1000 Sabores — Todos los derechos reservados
-      </footer>
+
     </main>
   );
 };
