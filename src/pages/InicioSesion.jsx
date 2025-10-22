@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import Footer from '../components/Footer';
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const Login = () => {
+const InicioSesion = () => {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (usuario === "admin" && password === "1234") {
-      setMensaje("🎉 Inicio de sesión exitoso. Bienvenido a Pastelería 1000 Sabores!");
+      setMensaje("🎉 ¡Inicio de sesión exitoso! Bienvenido a Pastelería 1000 Sabores 🍰");
     } else {
-      setMensaje("❌ Usuario o contraseña incorrectos.");
+      setMensaje("❌ Usuario o contraseña incorrectos, inténtalo nuevamente.");
     }
+
     setTimeout(() => setMensaje(""), 3000);
     setUsuario("");
     setPassword("");
@@ -30,7 +31,7 @@ const Login = () => {
       <div
         className="p-4 shadow rounded"
         style={{
-          backgroundColor: "white",
+          backgroundColor: "#FFFFFF",
           width: "100%",
           maxWidth: "400px",
           borderRadius: "12px",
@@ -38,10 +39,14 @@ const Login = () => {
       >
         <h2
           className="text-center mb-4"
-          style={{ fontFamily: "'Pacifico', cursive", color: "#B84E24" }}
+          style={{
+            fontFamily: "'Pacifico', cursive",
+            color: "#B84E24",
+          }}
         >
           Iniciar Sesión 🍰
         </h2>
+
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label fw-bold">Usuario</label>
@@ -95,4 +100,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default InicioSesion;

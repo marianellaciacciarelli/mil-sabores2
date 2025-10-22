@@ -1,14 +1,16 @@
-import React from 'react';
-import Navbar from './Navbar';     // ✅ Navbar viene de Navbar.jsx
-import Footer from './Footer';     // ✅ Footer viene de Footer.jsx
-import { Outlet } from 'react-router-dom';
+import React from 'react'
+import Footer  from './Footer'
+import Navbar  from './Navbar'
+import { Outlet } from 'react-router-dom'
 
 export const Layout = () => {
   return (
-    <div>
+    <div className="app">              {/* 👈 contenedor flex de toda la app */}
       <Navbar />
-      <Outlet />   {/* Aquí se mostrarán las páginas (Home, Contacto, Registro...) */}
+      <main className="page-content">  {/* 👈 ocupa el espacio disponible */}
+        <Outlet />
+      </main>
       <Footer />
     </div>
-  );
-};
+  )
+}
