@@ -19,8 +19,6 @@ export default function NavbarMS() {
             <Nav.Link href="/contacto">Contacto</Nav.Link>
           <NavLink to="/registroUsuario" className="nav-link">Registro</NavLink>
 
-
-
             <Nav.Link href="/login">Login</Nav.Link>
             <Button as="a" href="/carrito" variant="outline-dark" size="sm">
               🛒 Carrito
