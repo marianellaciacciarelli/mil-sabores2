@@ -16,7 +16,7 @@ const Login = () => {
         setTimeout(() => navigate("/admin", { state: { usuarioFromLogin: usuario } }), 1000);
     } else if (usuario === "usuario" && password === "1234") { // Usa 'else if' aquí
         setMensaje("🎉 Inicio de sesión exitoso. Bienvenido a Pastelería 1000 Sabores!");
-        setTimeout(() => navigate("/catalogo", { state: { usuarioFromLogin: usuario } }), 1000);
+        setTimeout(() => navigate("/ofertas", { state: { usuarioFromLogin: usuario } }), 1000);
     } else { // Este 'else' captura todos los casos que no cumplen las condiciones anteriores
         setMensaje("❌ Usuario o contraseña incorrectos.");
     }
