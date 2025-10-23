@@ -127,7 +127,7 @@ export const Carrito = () => {
                   +
                 </button>
                 <button
-                  className="btn btn-danger btn-sm"
+                  className="btn btn-pink btn-sm"
                   onClick={() => eliminarProducto(item.id)}
                 >
                   🗑 Quitar
