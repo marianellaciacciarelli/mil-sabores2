@@ -1,29 +1,34 @@
+// 🏠 Test del componente Home.jsx
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import Home from "../src/pages/Home";
 
-describe("Componente Home", () => {
-  it("renderiza el título correctamente", () => {
+describe("🏠 Componente Home", () => {
+  // ✅ 1️⃣ Verifica que el título principal se muestre correctamente
+  it("muestra el título principal", () => {
     render(<Home />);
-    expect(screen.getByText("Título del sitio")).toBeInTheDocument();
+    expect(screen.getByText(/Celebra la dulzura de la vida/i)).toBeInTheDocument();
   });
 
-  it("contiene un párrafo descriptivo", () => {
+  // ✅ 2️⃣ Verifica que exista una imagen con alt="Logo"
+  it("muestra la imagen del logo", () => {
     render(<Home />);
-    expect(screen.getByText(/Lorem ipsum/i)).toBeInTheDocument();
+    const logo = screen.getByAltText("Logo");
+    expect(logo).toBeInTheDocument();
   });
 
-  it('renderiza el botón "Validar"', () => {
+  // ✅ 3️⃣ Comprueba que haya uno o más párrafos descriptivos
+  it("contiene uno o más párrafos descriptivos", () => {
     render(<Home />);
-    expect(screen.getByRole("button", { name: /validar/i })).toBeInTheDocument();
+    const parrafos = screen.getAllByText((content, element) => {
+      return element.tagName.toLowerCase() === "p";
+    });
+    expect(parrafos.length).toBeGreaterThan(0);
   });
 
-  it("muestra mensaje al hacer clic en Validar", () => {
+  // ✅ 4️⃣ Verifica que exista el texto “Productos Destacados”
+  it("muestra la sección 'Productos Destacados'", () => {
     render(<Home />);
-    const boton = screen.getByRole("button", { name: /validar/i });
-    fireEvent.click(boton);
-    expect(screen.getByRole("status")).toHaveTextContent(
-      "Validado correctamente"
-    );
+    expect(screen.getByText(/Productos Destacados/i)).toBeInTheDocument();
   });
 });
