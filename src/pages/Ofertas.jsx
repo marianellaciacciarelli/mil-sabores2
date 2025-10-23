@@ -42,10 +42,44 @@ const Ofertas = () => {
     e.currentTarget.alt = "Imagen no disponible";
   };
 
+  // 🧠 Función que agrega productos al carrito
+  const agregarAlCarrito = (producto) => {
+    const key = "carrito_ms";
+    let arr = [];
+    try {
+      arr = JSON.parse(localStorage.getItem(key)) || [];
+    } catch {
+      arr = [];
+    }
+
+    const precioOferta = Math.round(producto.precio * 0.5);
+    const prod = {
+      id: producto.id,
+      nombre: producto.nombre,
+      precio: precioOferta, // 👈 precio rebajado
+      imagen: producto.imagen,
+      categoria: "Ofertas",
+      cantidad: 1,
+    };
+
+    const index = arr.findIndex((it) => it.id === prod.id);
+    if (index >= 0) arr[index].cantidad = (arr[index].cantidad ?? 1) + 1;
+    else arr.push(prod);
+
+    localStorage.setItem(key, JSON.stringify(arr));
+    navigate("/carrito");
+  };
+
   return (
-    <main className="container-custom bg-crema-pastel text-choco py-5" style={{ fontFamily: "Lato, sans-serif" }}>
+    <main
+      className="container-custom bg-crema-pastel text-choco py-5"
+      style={{ fontFamily: "Lato, sans-serif" }}
+    >
       <header className="text-center mb-5">
-        <h1 className="fw-bold" style={{ fontFamily: "'Pacifico', cursive", color: "var(--choco)" }}>
+        <h1
+          className="fw-bold"
+          style={{ fontFamily: "'Pacifico', cursive", color: "var(--choco)" }}
+        >
           🎉 Ofertas Especiales
         </h1>
         <p className="lead">
@@ -69,17 +103,42 @@ const Ofertas = () => {
 
                 <div className="card-body text-center d-flex flex-column justify-content-between">
                   <div>
-                    <h5 className="card-title fw-bold text-choco" style={{ fontFamily: "'Pacifico', cursive" }}>
+                    <h5
+                      className="card-title fw-bold text-choco"
+                      style={{ fontFamily: "'Pacifico', cursive" }}
+                    >
                       {p.nombre}
                     </h5>
                     <p className="card-text">{p.descripcion}</p>
-                    <span className="price-old">${CLP(p.precio)} CLP</span>
-                    <span className="price-new">${CLP(precioOferta)} CLP</span>
+                    <div>
+                      <span
+                        className="text-muted me-2"
+                        style={{
+                          textDecoration: "line-through",
+                          fontSize: "0.9rem",
+                        }}
+                      >
+                        ${CLP(p.precio)} CLP
+                      </span>
+                      <span
+                        className="fw-bold"
+                        style={{ color: "#28a745", fontSize: "1.1rem" }}
+                      >
+                        ${CLP(precioOferta)} CLP
+                      </span>
+                    </div>
                   </div>
 
                   <button
-                    className="btn-rosa mt-3"
-                    onClick={() => navigate("/carrito")} // 👈 te lleva al carrito
+                    className="btn mt-3"
+                    style={{
+                      backgroundColor: "#FFC0CB",
+                      color: "#fff",
+                      fontWeight: "bold",
+                      borderRadius: "8px",
+                      border: "none",
+                    }}
+                    onClick={() => agregarAlCarrito(p)} // ✅ aquí va la magia
                   >
                     🛒 Agregar al carrito
                   </button>

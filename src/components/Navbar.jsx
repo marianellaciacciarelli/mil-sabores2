@@ -21,6 +21,7 @@ export default function NavbarMS() {
             <Nav.Link href="/login">Login</Nav.Link>
             <Nav.Link href="/registrousuario">Registro</Nav.Link>
             <Nav.Link href="/blog">Blog</Nav.Link>
+            <Nav.Link href="/checkout">ch</Nav.Link>
             <Button as="a" href="/carrito" variant="outline-dark" size="sm">
               🛒 Carrito
             </Button>

@@ -82,7 +82,7 @@ const Login = () => {
           <button
             type="button"
             className="btn w-100"
-            onClick={() => navigate("/registro", { state: { usuarioFromLogin: usuario } })}
+            onClick={() => navigate("/registrousuario", { state: { usuarioFromLogin: usuario } })}
             style={{
               backgroundColor: "#FFC0CB",
               color: "white",
