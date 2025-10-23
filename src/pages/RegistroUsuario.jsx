@@ -65,7 +65,7 @@ return (
 id="nombre"
 type="text"
 className="form-control"
-placeholder="Marianella Ciacciarelli"
+placeholder="Nombre Apellido"
 value={form.nombre}
 onChange={onChange}
 required
