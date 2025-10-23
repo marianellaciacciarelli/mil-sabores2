@@ -20,7 +20,7 @@ export default function NavbarMS() {
             <Nav.Link href="/contacto">Contacto</Nav.Link>
             <Nav.Link href="/login">Login</Nav.Link>
             <Nav.Link href="/registrousuario">Registro</Nav.Link>
-            <Nav.Link href="/blog">Blog</Nav.Link>
+            {/*<Nav.Link href="/blog">Blog</Nav.Link>   SI EL MAIKEL AGREGA BLOG, ACTIVAR ESTO*/}
             <Button as="a" href="/carrito" variant="outline-dark" size="sm">
               🛒 Carrito
             </Button>
