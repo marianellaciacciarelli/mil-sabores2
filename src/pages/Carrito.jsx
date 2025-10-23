@@ -184,7 +184,7 @@ export const Carrito = () => {
             </div>
 
             <p className="text-muted small mt-3 mb-0">
-              * Los datos del carrito se guardan en tu navegador (localStorage).
+              * Los datos del carrito se guardan en el navegador (localStorage).
             </p>
           </div>
         </div>
