@@ -8,8 +8,8 @@ describe('RegistroUsuario', () => {
     const user = userEvent.setup()
 
     // Completar campos
-    await user.type(screen.getByLabelText(/Nombre completo/i), 'Marianella Ciacciarelli')
-    await user.type(screen.getByLabelText(/Correo electrónico/i), 'mari@example.com')
+    await user.type(screen.getByLabelText(/Nombre completo/i), 'Nombre Apellido')
+    await user.type(screen.getByLabelText(/Correo electrónico/i), 'NombreApellido@example.com')
     await user.type(screen.getByLabelText(/Celular/i), '+56 9 12345678')
     await user.type(screen.getByLabelText(/^Contraseña$/i), 'abc12345')     // 8+ con letras y números
     await user.type(screen.getByLabelText(/Repite la contraseña/i), 'abc12345')
