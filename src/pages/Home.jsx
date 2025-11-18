@@ -2,8 +2,28 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import NavbarMS from '../components/Navbar';
 import Footer from '../components/Footer';
 
+import { useState, useEffect } from "react"; // IMPORTAMOS lo necesario para llamar la API desde React
+import axios from "axios";
 
 export default function Home() {
+
+  // ESTADO donde guardamos los productos destacados que vienen del backend
+  const [destacados, setDestacados] = useState([]);
+
+  // useEffect que se ejecuta al cargar la página
+  // Aquí hacemos la petición al backend para traer los productos destacados
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/productos/destacados")  // LLAMADA A LA API REAL
+      .then((res) => {
+        console.log("Destacados recibidos:", res.data); // Mostrar la respuesta en consola
+        setDestacados(res.data); // Guardamos los productos en el estado
+      })
+      .catch((err) => {
+        console.error("Error cargando destacados:", err);
+      });
+  }, []); // [] → se ejecuta solo una vez al cargar
+
   return (
     <>
 
@@ -55,43 +75,44 @@ export default function Home() {
       <section className="my-5">
         <Container>
           <h2 className="mb-4 text-center brand-script">Productos Destacados</h2>
+
           <Row className="g-4">
-            {[
-              {
-                id: 'p1',
-                img: '/img/torta_chocolate.jpg',
-                title: 'Torta de Chocolate',
-                text: 'Deliciosa torta con capas de ganache y un toque de avellanas.',
-              },
-              {
-                id: 'p2',
-                img: '/img/torta-fruta.jpg',
-                title: 'Torta de Frutas',
-                text: 'Mezcla de frutas frescas con crema chantilly y bizcocho.',
-              },
-              {
-                id: 'p3',
-                img: '/img/torta-vainilla-circular.jpg',
-                title: 'Torta de Vainilla',
-                text: 'Bizcocho clásico relleno con crema pastelera.',
-              },
-            ].map((p) => (
+
+            {/* aqui antes habian productos estaticos (MAQUETADOS)
+                ahora se pintan automaticamente desde el backend */}
+            {destacados.map((p) => (
               <Col key={p.id} md={4}>
                 <Card className="h-100 shadow-soft card-hover">
-                  <Card.Img src={p.img} alt={p.title} />
+
+                  {/* Si el backend trae una imagen, se muestra */}
+                  
+
+                {p.rutaImagen && (<Card.Img src={p.rutaImagen}alt={p.nombre}style={{
+                width: "100%",
+                height: "200px",       //MISMA ALTURA
+                objectFit: "cover",    //RECORTA SIN DEFORMAR
+                borderRadius: "8px 8px 0 0"}}/>
+)}
+
+
                   <Card.Body>
-                    <Card.Title>{p.title}</Card.Title>
-                    <Card.Text>{p.text}</Card.Text>
+                    {/* Datos REALES desde la BD */}
+                    <Card.Title>{p.nombre}</Card.Title>
+                    <Card.Text>{p.descripcion}</Card.Text>
+
+                    <p className="fw-bold">${p.precio}</p>
+
                     <Button href="/catalogo" variant="dark">Ver más</Button>
                   </Card.Body>
                 </Card>
               </Col>
             ))}
+
           </Row>
         </Container>
       </section>
 
-
+      <Footer />
     </>
   );
 }
