@@ -9,7 +9,10 @@ const Productos = () => {
   useEffect(() => {
     axios
       .get("http://localhost:8080/api/productos")
-      .then((res) => setProductos(res.data))
+      .then((res) => {
+        console.log("Productos cargados:", res.data); // DEBUG
+        setProductos(res.data);
+      })
       .catch((err) => console.error("Error cargando productos", err));
   }, []);
 
@@ -22,19 +25,15 @@ const Productos = () => {
         fontFamily: "Lato, sans-serif",
       }}
     >
-      {/* Encabezado */}
       <header className="text-center mb-5">
         <h1 style={{ fontFamily: "'Pacifico', cursive" }}>🍮 Nuestros Productos</h1>
         <p className="lead">Descubre la dulzura de Pastelería 1000 Sabores</p>
       </header>
 
-      {/* Listado de productos */}
       <section className="row g-4">
         {productos.map((producto) => (
           <div className="col-sm-6 col-md-4 col-lg-3" key={producto.id}>
             <div className="card h-100 shadow-sm border-0">
-              
-              {/* Imagen */}
               <img
                 src={producto.rutaImagen}
                 className="card-img-top"

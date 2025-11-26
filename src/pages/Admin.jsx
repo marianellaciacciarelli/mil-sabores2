@@ -15,13 +15,7 @@ export default function Admin() {
 
   // Productos desde la API
   const [productos, setProductos] = useState([]);
-
-  // Formulario
-  const [form, setForm] = useState({
-    nombre: "",
-    descripcion: "",
-    precio: ""
-  });
+  
 
   const [editId, setEditId] = useState(null);
 
@@ -50,8 +44,11 @@ export default function Admin() {
 
     try {
       if (editId) {
-        // Editar (PUT)
-        await axios.put('http://localhost:8080/api/productos/${editId}', form);
+        //// EDITAR
+        // EDITAR
+        await axios.put(`http://localhost:8080/api/productos/${editId}`, form);
+
+
       } else {
         // Crear nuevo (POST)
         await axios.post("http://localhost:8080/api/productos", form);
@@ -71,12 +68,23 @@ export default function Admin() {
     }
   };
 
+  //formulario
+  const [form, setForm] = useState({
+    nombre: "",
+    descripcion: "",
+    precio: "",
+    rutaImagen: "",
+    destacado: false,
+    categoria:{
+    id: null}
+  });
+
   // Eliminar producto
   const eliminar = async (id) => {
     if (!confirm("¿Eliminar este producto?")) return;
 
     try {
-      await axios.delete('http://localhost:8080/api/productos/${id}');
+      await axios.delete(`http://localhost:8080/api/productos/${id}`);
 
       const res = await axios.get("http://localhost:8080/api/productos");
       setProductos(res.data);
@@ -129,6 +137,44 @@ export default function Admin() {
               required
             />
           </div>
+
+          <div className="col-md-6 mt-2">
+  <label className="form-label fw-bold">Ruta Imagen</label>
+  <input
+    className="form-control"
+    name="rutaImagen"
+    value={form.rutaImagen}
+    onChange={onChange}
+  />
+</div>
+
+<div className="col-md-3 mt-2">
+  <label className="form-label fw-bold">Categoría</label>
+  <select
+    className="form-control"
+    name="categoriaId"
+    value={form.categoriaId}
+    onChange={onChange}
+  >
+    <option value="">Seleccione una categoría</option>
+    <option value="1">Chocolate</option>
+    <option value="2">Vainilla</option>
+    <option value="3">Frutilla</option>
+  </select>
+</div>
+
+<div className="col-md-3 mt-4">
+  <label className="form-check-label fw-bold">
+    <input
+      type="checkbox"
+      className="form-check-input me-2"
+      name="destacado"
+      checked={form.destacado}
+      onChange={onChange}
+    />
+    Destacado
+  </label>
+</div>
 
           <div className="col-md-5">
             <label className="form-label fw-bold">Descripción</label>
