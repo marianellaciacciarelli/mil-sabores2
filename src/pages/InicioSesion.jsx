@@ -1,23 +1,37 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { authAPI } from "../api/auth";
 
 const InicioSesion = () => {
-  const [usuario, setUsuario] = useState("");
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMensaje("");
 
-    if (usuario === "admin" && password === "1234") {
+    try {
+      const response = await authAPI.login(email, password);
+      
       setMensaje("🎉 ¡Inicio de sesión exitoso! Bienvenido a Pastelería 1000 Sabores 🍰");
-    } else {
+      
+      // Redirigir al home después de 1 segundo
+      setTimeout(() => {
+        navigate('/home');
+      }, 1000);
+      
+    } catch (error) {
+      console.error('Error en login:', error);
       setMensaje("❌ Usuario o contraseña incorrectos, inténtalo nuevamente.");
+      setTimeout(() => setMensaje(""), 3000);
+    } finally {
+      setLoading(false);
     }
-
-    setTimeout(() => setMensaje(""), 3000);
-    setUsuario("");
-    setPassword("");
   };
 
   return (
@@ -49,14 +63,15 @@ const InicioSesion = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label className="form-label fw-bold">Usuario</label>
+            <label className="form-label fw-bold">Correo Electrónico</label>
             <input
-              type="text"
+              type="email"
               className="form-control"
-              value={usuario}
-              onChange={(e) => setUsuario(e.target.value)}
-              placeholder="Ingresa tu usuario"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="tu@email.com"
               required
+              disabled={loading}
             />
           </div>
 
@@ -69,6 +84,7 @@ const InicioSesion = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Ingresa tu contraseña"
               required
+              disabled={loading}
             />
           </div>
 
@@ -81,10 +97,30 @@ const InicioSesion = () => {
               fontWeight: "bold",
               borderRadius: "8px",
             }}
+            disabled={loading}
           >
-            Entrar 🔐
+            {loading ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Ingresando...
+              </>
+            ) : (
+              <>Entrar 🔐</>
+            )}
           </button>
         </form>
+
+        <div className="text-center mt-3">
+          <p className="mb-0">
+            ¿No tienes cuenta?{' '}
+            <a 
+              href="/registroUsuario" 
+              style={{ color: "#B84E24", fontWeight: "bold", textDecoration: "none" }}
+            >
+              Regístrate aquí
+            </a>
+          </p>
+        </div>
 
         {mensaje && (
           <div

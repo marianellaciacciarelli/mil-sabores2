@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function PasswordField({ id, label, value, onChange, isValid = true }) {
+export default function PasswordField({ id, label, value, onChange, isValid = true, disabled = false }) {
   const [show, setShow] = useState(false);
 
   return (
@@ -15,12 +15,14 @@ export default function PasswordField({ id, label, value, onChange, isValid = tr
           value={value}
           onChange={onChange}
           required
+          disabled={disabled}
         />
         <button
           type="button"
           className="btn btn-outline-secondary"
           onClick={() => setShow((s) => !s)}
           aria-label={show ? "Ocultar contraseña" : "Mostrar contraseña"}
+          disabled={disabled}
         >
           {show ? "Ocultar" : "Ver"}
         </button>

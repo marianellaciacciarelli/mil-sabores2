@@ -1,10 +1,36 @@
 import { NavLink } from "react-router-dom";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { authAPI } from "../api/auth";
 
 export default function NavbarMS() {
-  // Verificar si el usuario está logueado
-  const isLoggedIn = !!localStorage.getItem('token');
+  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Verificar si hay usuario logueado
+    const checkAuth = () => {
+      const authenticated = authAPI.isAuthenticated();
+      setIsLoggedIn(authenticated);
+      if (authenticated) {
+        const currentUser = authAPI.getCurrentUser();
+        setUser(currentUser);
+      }
+    };
+
+    checkAuth();
+    
+    // Escuchar cambios en localStorage
+    window.addEventListener('storage', checkAuth);
+    return () => window.removeEventListener('storage', checkAuth);
+  }, []);
+
+  const handleLogout = () => {
+    authAPI.logout();
+    setIsLoggedIn(false);
+    setUser(null);
+    window.location.href = '/home';
+  };
 
   return (
     <Navbar expand="lg" className="navbar-ms shadow-soft">
@@ -25,24 +51,23 @@ export default function NavbarMS() {
             {isLoggedIn ? (
               <>
                 <Nav.Link href="/mis-compras">📋 Mis Compras</Nav.Link>
+                <Nav.Item className="d-flex align-items-center me-2">
+                  <span className="text-muted small">
+                    👤 Hola, {user?.firstName || 'Usuario'}
+                  </span>
+                </Nav.Item>
                 <Button 
                   variant="outline-danger" 
                   size="sm"
-                  onClick={() => {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('userRole');
-                    localStorage.removeItem('userName');
-                    localStorage.removeItem('isAdmin');
-                    window.location.href = '/login';
-                  }}
+                  onClick={handleLogout}
                 >
                   Cerrar Sesión
                 </Button>
               </>
             ) : (
               <>
-                <Nav.Link href="/login">Login</Nav.Link>
-                <Nav.Link href="/registrousuario">Registro</Nav.Link>
+                <Nav.Link href="/inicioSesion">Login</Nav.Link>
+                <Nav.Link href="/registroUsuario">Registro</Nav.Link>
               </>
             )}
             

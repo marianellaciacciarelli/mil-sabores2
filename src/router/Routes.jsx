@@ -35,8 +35,8 @@ export const RoutesComp = () => {
                         <Route path='/' element={<Navigate to='/home' />} /> {/*Cada vez que se entra a la raíz redirige a Home*/}
                         <Route path='/home' element={<Home />} />
                         <Route path='/contacto' element={<Contacto />} />
-                        <Route path='/login' element={<Login />} />
-                        <Route path='/catalogo' element={<Catalogo />} />
+                        <Route path='/login' element={<InicioSesion />} />
+                        <Route path='/catalogo' element={<Productos />} />
                         <Route path='/nosotros' element={<Nosotros />} />
                        <Route path="/registroUsuario" element={<RegistroUsuario />} />
 
