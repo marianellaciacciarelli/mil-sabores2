@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { reportsAPI } from "../api/reports";
+import { categoriesAPI } from "../api/categories";
 import axios from "axios";
 
 export default function Admin() {
@@ -28,12 +29,18 @@ export default function Admin() {
     categoriaId: ""
   });
 
-  // Bloqueo de acceso
-  useEffect(() => {
-    if (localStorage.getItem("isAdmin") !== "true") {
-      navigate("/login");
-    }
-  }, [navigate]);
+  // Estados para gestión de categorías
+  const [categorias, setCategorias] = useState([]);
+  const [categoryEditId, setCategoryEditId] = useState(null);
+  const [categoryForm, setCategoryForm] = useState({
+    nombre: "",
+    descripcion: ""
+  });
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [categoryLoading, setCategoryLoading] = useState(false);
+
+  // Nota: El bloqueo de acceso ahora se maneja por AdminRoute
+  // Ya no necesitamos validación manual aquí
 
   // Cargar productos
   useEffect(() => {
@@ -46,6 +53,13 @@ export default function Admin() {
   useEffect(() => {
     if (activeTab === 'dashboard') {
       loadDashboardData();
+    }
+  }, [activeTab]);
+
+  // Cargar categorías
+  useEffect(() => {
+    if (activeTab === 'categorias') {
+      loadCategories();
     }
   }, [activeTab]);
 
@@ -175,6 +189,75 @@ export default function Admin() {
       destacado: false, 
       categoriaId: "" 
     });
+  };
+
+  // Funciones para gestión de categorías
+  const loadCategories = async () => {
+    try {
+      setCategoryLoading(true);
+      const data = await categoriesAPI.getAll();
+      setCategorias(data);
+    } catch (error) {
+      console.error('Error cargando categorías:', error);
+    } finally {
+      setCategoryLoading(false);
+    }
+  };
+
+  const onCategoryChange = (e) => {
+    const { name, value } = e.target;
+    setCategoryForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const onCategorySubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (categoryEditId) {
+        await categoriesAPI.update(categoryEditId, categoryForm);
+      } else {
+        await categoriesAPI.create(categoryForm);
+      }
+      loadCategories();
+      closeCategoryModal();
+    } catch (error) {
+      console.error('Error guardando categoría:', error);
+      alert('Error al guardar la categoría');
+    }
+  };
+
+  const editarCategoria = (categoria) => {
+    setCategoryEditId(categoria.id);
+    setCategoryForm({
+      nombre: categoria.nombre,
+      descripcion: categoria.descripcion || ""
+    });
+    setShowCategoryModal(true);
+  };
+
+  const toggleCategoryStatus = async (categoria) => {
+    try {
+      if (categoria.activa) {
+        await categoriesAPI.deactivate(categoria.id);
+      } else {
+        await categoriesAPI.activate(categoria.id);
+      }
+      loadCategories();
+    } catch (error) {
+      console.error('Error cambiando estado de categoría:', error);
+      alert('Error al cambiar el estado de la categoría');
+    }
+  };
+
+  const openCreateCategoryModal = () => {
+    setCategoryEditId(null);
+    setCategoryForm({ nombre: "", descripcion: "" });
+    setShowCategoryModal(true);
+  };
+
+  const closeCategoryModal = () => {
+    setShowCategoryModal(false);
+    setCategoryEditId(null);
+    setCategoryForm({ nombre: "", descripcion: "" });
   };
 
   const renderDashboard = () => (
@@ -334,9 +417,166 @@ export default function Admin() {
           className="btn btn-outline-primary"
           onClick={loadDashboardData}
         >
-          🔄 Actualizar Dashboard
+           Actualizar Dashboard
         </button>
       </div>
+    </div>
+  );
+
+  const renderCategorias = () => (
+    <div>
+      <div 
+        className="row mb-4 p-3 rounded"
+        style={{ backgroundColor: "#FFF5E1" }}
+      >
+        <div className="col-12 text-center">
+          <h2 
+            className="mb-2"
+            style={{ color: "#8B4513", fontFamily: "Pacifico, cursive" }}
+          >
+            📁 Administrar Categorías
+          </h2>
+          <p className="text-muted">Gestiona las categorías de tus productos</p>
+        </div>
+      </div>
+
+      <section className="mb-4">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h4 className="text-secondary">Lista de Categorías</h4>
+          <button 
+            className="btn btn-primary"
+            onClick={openCreateCategoryModal}
+            style={{ backgroundColor: "#8B4513", borderColor: "#8B4513" }}
+          >
+            <i className="fas fa-plus me-2"></i>
+            Nueva Categoría
+          </button>
+        </div>
+
+        {categoryLoading ? (
+          <div className="text-center">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Cargando categorías...</span>
+            </div>
+          </div>
+        ) : (
+          <div className="table-responsive">
+            <table className="table table-hover bg-white">
+              <thead className="table-light">
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Estado</th>
+                  <th className="text-end">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {categorias.map(categoria => (
+                  <tr key={categoria.id}>
+                    <td>{categoria.id}</td>
+                    <td><strong>{categoria.nombre}</strong></td>
+                    <td>{categoria.descripcion || 'Sin descripción'}</td>
+                    <td>
+                      <span 
+                        className={`badge ${categoria.activa ? 'bg-success' : 'bg-secondary'}`}
+                      >
+                        {categoria.activa ? 'Activa' : 'Inactiva'}
+                      </span>
+                    </td>
+                    <td className="text-end">
+                      <button 
+                        className="btn btn-sm btn-outline-primary me-2" 
+                        onClick={() => editarCategoria(categoria)}
+                        title="Editar categoría"
+                      >
+                        <i className="fas fa-edit"></i>
+                      </button>
+                      <button 
+                        className={`btn btn-sm ${categoria.activa ? 'btn-outline-warning' : 'btn-outline-success'}`}
+                        onClick={() => toggleCategoryStatus(categoria)}
+                        title={categoria.activa ? 'Desactivar' : 'Activar'}
+                      >
+                        <i className={`fas ${categoria.activa ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {categorias.length === 0 && (
+                  <tr>
+                    <td colSpan="5" className="text-muted text-center">
+                      No hay categorías registradas
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
+      {/* Modal para crear/editar categoría */}
+      {showCategoryModal && (
+        <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">
+                  {categoryEditId ? 'Editar Categoría' : 'Nueva Categoría'}
+                </h5>
+                <button 
+                  type="button" 
+                  className="btn-close" 
+                  onClick={closeCategoryModal}
+                ></button>
+              </div>
+              <form onSubmit={onCategorySubmit}>
+                <div className="modal-body">
+                  <div className="mb-3">
+                    <label className="form-label">Nombre *</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="nombre"
+                      value={categoryForm.nombre}
+                      onChange={onCategoryChange}
+                      required
+                      placeholder="Ej: Postres, Bebidas, etc."
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Descripción</label>
+                    <textarea
+                      className="form-control"
+                      name="descripcion"
+                      value={categoryForm.descripcion}
+                      onChange={onCategoryChange}
+                      rows="3"
+                      placeholder="Descripción opcional de la categoría"
+                    />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button 
+                    type="button" 
+                    className="btn btn-secondary" 
+                    onClick={closeCategoryModal}
+                  >
+                    Cancelar
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="btn btn-primary"
+                    style={{ backgroundColor: "#8B4513", borderColor: "#8B4513" }}
+                  >
+                    {categoryEditId ? 'Actualizar' : 'Crear'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 
@@ -500,7 +740,15 @@ export default function Admin() {
                 className={`nav-link ${activeTab === 'dashboard' ? 'active' : ''}`}
                 onClick={() => setActiveTab('dashboard')}
               >
-                📊 Dashboard
+                 Dashboard
+              </button>
+            </li>
+            <li className="nav-item">
+              <button 
+                className={`nav-link ${activeTab === 'categorias' ? 'active' : ''}`}
+                onClick={() => setActiveTab('categorias')}
+              >
+                 Categorías
               </button>
             </li>
             <li className="nav-item">
@@ -508,7 +756,7 @@ export default function Admin() {
                 className={`nav-link ${activeTab === 'productos' ? 'active' : ''}`}
                 onClick={() => setActiveTab('productos')}
               >
-                🛠️ Productos
+                 Productos
               </button>
             </li>
           </ul>
@@ -517,6 +765,7 @@ export default function Admin() {
 
       {/* Contenido según tab activo */}
       {activeTab === 'dashboard' && renderDashboard()}
+      {activeTab === 'categorias' && renderCategorias()}
       {activeTab === 'productos' && renderProductos()}
     </main>
   );

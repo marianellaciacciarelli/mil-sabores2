@@ -1,6 +1,8 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import { Layout } from '../components/Layout'
+import ProtectedRoute from '../components/ProtectedRoute'
+import AdminRoute from '../components/AdminRoute'
 import  Home from '../pages/Home'
 import { Error404 } from '../pages/Error404'
 import Contacto from '../pages/Contacto'
@@ -42,15 +44,35 @@ export const RoutesComp = () => {
 
                         <Route path='/carrito' element={<Carrito />} />
                         <Route path='/productos' element={<Productos />} />
-                        <Route path="/checkout" element={<Checkout />} />
+                        <Route path="/checkout" element={
+                            <ProtectedRoute>
+                                <Checkout />
+                            </ProtectedRoute>
+                        } />
                         <Route path="/categoria" element={<Categoria />} />
                         <Route path="/blog" element={<Blog />} />
-                        <Route path="/compraExitosa" element={<CompraExitosa />} />
+                        <Route path="/compraExitosa" element={
+                            <ProtectedRoute>
+                                <CompraExitosa />
+                            </ProtectedRoute>
+                        } />
                         <Route path="/ofertas" element={<Ofertas />} />
                         <Route path="/inicioSesion" element={<InicioSesion />} />
-                        <Route path="/compraFallida" element={<CompraFallida />} />
-                        <Route path="/admin" element={<Admin />} />
-                        <Route path="/mis-compras" element={<MisCompras />} />
+                        <Route path="/compraFallida" element={
+                            <ProtectedRoute>
+                                <CompraFallida />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/admin" element={
+                            <AdminRoute>
+                                <Admin />
+                            </AdminRoute>
+                        } />
+                        <Route path="/mis-compras" element={
+                            <ProtectedRoute>
+                                <MisCompras />
+                            </ProtectedRoute>
+                        } />
 
                         
                     </Route>
