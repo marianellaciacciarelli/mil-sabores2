@@ -3,6 +3,9 @@ import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import React from "react";
 
 export default function NavbarMS() {
+  // Verificar si el usuario está logueado
+  const isLoggedIn = !!localStorage.getItem('token');
+
   return (
     <Navbar expand="lg" className="navbar-ms shadow-soft">
       <Container>
@@ -18,8 +21,31 @@ export default function NavbarMS() {
             <Nav.Link href="/catalogo">Catálogo</Nav.Link>
             <Nav.Link href="/ofertas">Ofertas</Nav.Link>
             <Nav.Link href="/contacto">Contacto</Nav.Link>
-            <Nav.Link href="/login">Login</Nav.Link>
-            <Nav.Link href="/registrousuario">Registro</Nav.Link>
+            
+            {isLoggedIn ? (
+              <>
+                <Nav.Link href="/mis-compras">📋 Mis Compras</Nav.Link>
+                <Button 
+                  variant="outline-danger" 
+                  size="sm"
+                  onClick={() => {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userRole');
+                    localStorage.removeItem('userName');
+                    localStorage.removeItem('isAdmin');
+                    window.location.href = '/login';
+                  }}
+                >
+                  Cerrar Sesión
+                </Button>
+              </>
+            ) : (
+              <>
+                <Nav.Link href="/login">Login</Nav.Link>
+                <Nav.Link href="/registrousuario">Registro</Nav.Link>
+              </>
+            )}
+            
             {/*<Nav.Link href="/blog">Blog</Nav.Link>   SI EL MAIKEL AGREGA BLOG, ACTIVAR ESTO*/}
             <Button as="a" href="/carrito" variant="outline-dark" size="sm">
               🛒 Carrito
