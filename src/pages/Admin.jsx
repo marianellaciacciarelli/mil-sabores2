@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { reportsAPI } from "../api/reports";
+import { categoriesAPI } from "../api/categories";
 import axios from "axios";
 
 export default function Admin() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // Estado para el dashboard
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -25,20 +26,29 @@ export default function Admin() {
     precio: "",
     rutaImagen: "",
     destacado: false,
-    categoriaId: ""
+    categoriaId: "",
+    stock: "",
+    stockCritico: ""
   });
 
-  // Bloqueo de acceso
-  useEffect(() => {
-    if (localStorage.getItem("isAdmin") !== "true") {
-      navigate("/login");
-    }
-  }, [navigate]);
+  // Estados para gestión de categorías
+  const [categorias, setCategorias] = useState([]);
+  const [categoryEditId, setCategoryEditId] = useState(null);
+  const [categoryForm, setCategoryForm] = useState({
+    nombre: "",
+    descripcion: ""
+  });
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [categoryLoading, setCategoryLoading] = useState(false);
+
+  // Nota: El bloqueo de acceso ahora se maneja por AdminRoute
+  // Ya no necesitamos validación manual aquí
 
   // Cargar productos
   useEffect(() => {
     if (activeTab === 'productos') {
       loadProducts();
+      loadCategories();
     }
   }, [activeTab]);
 
@@ -49,9 +59,16 @@ export default function Admin() {
     }
   }, [activeTab]);
 
+  // Cargar categorías
+  useEffect(() => {
+    if (activeTab === 'categorias') {
+      loadCategories();
+    }
+  }, [activeTab]);
+
   const loadProducts = () => {
     axios
-      .get("http://localhost:8080/api/productos")
+      .get("http://localhost:8080/api/v1/productos")
       .then(res => setProductos(res.data))
       .catch(err => console.error("Error cargando productos", err));
   };
@@ -120,9 +137,9 @@ export default function Admin() {
       };
 
       if (editId) {
-        await axios.put(`http://localhost:8080/api/productos/${editId}`, productData);
+        await axios.put(`http://localhost:8080/api/v1/productos/${editId}`, productData);
       } else {
-        await axios.post("http://localhost:8080/api/productos", productData);
+        await axios.post("http://localhost:8080/api/v1/productos", productData);
       }
 
       loadProducts();
@@ -145,7 +162,7 @@ export default function Admin() {
     if (!confirm("¿Eliminar este producto?")) return;
 
     try {
-      await axios.delete(`http://localhost:8080/api/productos/${id}`);
+      await axios.delete(`http://localhost:8080/api/v1/productos/${id}`);
       loadProducts();
     } catch (err) {
       console.error("Error eliminando", err);
@@ -161,7 +178,9 @@ export default function Admin() {
       precio: p.precio,
       rutaImagen: p.rutaImagen || "",
       destacado: p.destacado || false,
-      categoriaId: p.categoria?.id || ""
+      categoriaId: p.categoria?.id || "",
+      stock: p.stock || "",
+      stockCritico: p.stockCritico || ""
     });
   };
 
@@ -173,8 +192,79 @@ export default function Admin() {
       precio: "", 
       rutaImagen: "", 
       destacado: false, 
-      categoriaId: "" 
+      categoriaId: "",
+      stock: "",
+      stockCritico: "" 
     });
+  };
+
+  // Funciones para gestión de categorías
+  const loadCategories = async () => {
+    try {
+      setCategoryLoading(true);
+      const data = await categoriesAPI.getAll();
+      setCategorias(data);
+    } catch (error) {
+      console.error('Error cargando categorías:', error);
+    } finally {
+      setCategoryLoading(false);
+    }
+  };
+
+  const onCategoryChange = (e) => {
+    const { name, value } = e.target;
+    setCategoryForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const onCategorySubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (categoryEditId) {
+        await categoriesAPI.update(categoryEditId, categoryForm);
+      } else {
+        await categoriesAPI.create(categoryForm);
+      }
+      loadCategories();
+      closeCategoryModal();
+    } catch (error) {
+      console.error('Error guardando categoría:', error);
+      alert('Error al guardar la categoría');
+    }
+  };
+
+  const editarCategoria = (categoria) => {
+    setCategoryEditId(categoria.id);
+    setCategoryForm({
+      nombre: categoria.nombre,
+      descripcion: categoria.descripcion || ""
+    });
+    setShowCategoryModal(true);
+  };
+
+  const toggleCategoryStatus = async (categoria) => {
+    try {
+      if (categoria.activa) {
+        await categoriesAPI.deactivate(categoria.id);
+      } else {
+        await categoriesAPI.activate(categoria.id);
+      }
+      loadCategories();
+    } catch (error) {
+      console.error('Error cambiando estado de categoría:', error);
+      alert('Error al cambiar el estado de la categoría');
+    }
+  };
+
+  const openCreateCategoryModal = () => {
+    setCategoryEditId(null);
+    setCategoryForm({ nombre: "", descripcion: "" });
+    setShowCategoryModal(true);
+  };
+
+  const closeCategoryModal = () => {
+    setShowCategoryModal(false);
+    setCategoryEditId(null);
+    setCategoryForm({ nombre: "", descripcion: "" });
   };
 
   const renderDashboard = () => (
@@ -189,7 +279,7 @@ export default function Admin() {
             className="mb-2"
             style={{ color: "#8B4513", fontFamily: "Pacifico, cursive" }}
           >
-            📊 Dashboard de Ventas
+            Dashboard de Ventas
           </h2>
           <p className="text-muted">Resumen de actividad comercial</p>
           {dashboardError && (
@@ -213,7 +303,7 @@ export default function Admin() {
                 <div className="col-md-3 mb-3">
                   <div className="card text-center h-100">
                     <div className="card-body bg-success text-white">
-                      <h5>💰 Ventas Totales</h5>
+                      <h5>Ventas Totales</h5>
                       <h3>{formatCurrency(salesSummary.ventasTotales)}</h3>
                       <small>Acumulado</small>
                     </div>
@@ -222,7 +312,7 @@ export default function Admin() {
                 <div className="col-md-3 mb-3">
                   <div className="card text-center h-100">
                     <div className="card-body bg-info text-white">
-                      <h5>📦 Órdenes</h5>
+                      <h5>Ordenes</h5>
                       <h3>{formatNumber(salesSummary.totalOrdenes)}</h3>
                       <small>Total</small>
                     </div>
@@ -231,7 +321,7 @@ export default function Admin() {
                 <div className="col-md-3 mb-3">
                   <div className="card text-center h-100">
                     <div className="card-body bg-warning text-white">
-                      <h5>📊 Ticket Promedio</h5>
+                      <h5>Ticket Promedio</h5>
                       <h3>{formatCurrency(salesSummary.ticketPromedio)}</h3>
                       <small>Por orden</small>
                     </div>
@@ -240,7 +330,7 @@ export default function Admin() {
                 <div className="col-md-3 mb-3">
                   <div className="card text-center h-100">
                     <div className="card-body bg-primary text-white">
-                      <h5>🛍️ Productos Vendidos</h5>
+                      <h5>Productos Vendidos</h5>
                       <h3>{formatNumber(salesSummary.productosVendidos)}</h3>
                       <small>Unidades</small>
                     </div>
@@ -261,7 +351,7 @@ export default function Admin() {
             <div className="col-md-6">
               <div className="card h-100">
                 <div className="card-header bg-primary text-white">
-                  <h5 className="mb-0">🏆 Top Productos</h5>
+                  <h5 className="mb-0">Top Productos</h5>
                 </div>
                 <div className="card-body">
                   {topProducts.length > 0 ? (
@@ -295,7 +385,7 @@ export default function Admin() {
             <div className="col-md-6">
               <div className="card h-100">
                 <div className="card-header bg-info text-white">
-                  <h5 className="mb-0">🎯 Ventas por Categoría</h5>
+                  <h5 className="mb-0">Ventas por Categoria</h5>
                 </div>
                 <div className="card-body">
                   {salesByCategory.length > 0 ? (
@@ -326,6 +416,94 @@ export default function Admin() {
               </div>
             </div>
           </div>
+
+          {/* Top Clientes y Status de Stock */}
+          <div className="row mb-4">
+            <div className="col-md-6">
+              <div className="card h-100">
+                <div className="card-header bg-warning text-white">
+                  <h5 className="mb-0">Top Clientes</h5>
+                </div>
+                <div className="card-body">
+                  {topClients.length > 0 ? (
+                    <div className="table-responsive">
+                      <table className="table table-sm">
+                        <thead>
+                          <tr>
+                            <th>Cliente</th>
+                            <th>Órdenes</th>
+                            <th>Total Gastado</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {topClients.slice(0, 5).map((client, index) => (
+                            <tr key={index}>
+                              <td>{client.nombreCliente}</td>
+                              <td><span className="badge bg-warning">{formatNumber(client.totalOrdenes)}</span></td>
+                              <td>{formatCurrency(client.totalGastado)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <p className="text-muted text-center">Sin datos de clientes</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div className="card h-100">
+                <div className="card-header bg-danger text-white">
+                  <h5 className="mb-0">Status de Stock</h5>
+                </div>
+                <div className="card-body">
+                  {stockStatus.length > 0 ? (
+                    <div className="table-responsive">
+                      <table className="table table-sm">
+                        <thead>
+                          <tr>
+                            <th>Producto</th>
+                            <th>Stock Actual</th>
+                            <th>Estado</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {stockStatus.slice(0, 5).map((item, index) => (
+                            <tr key={index}>
+                              <td>{item.nombreProducto}</td>
+                              <td>{formatNumber(item.stockActual)}</td>
+                              <td>
+                                <span 
+                                  className={`badge ${
+                                    item.stockActual <= item.stockMinimo 
+                                      ? 'bg-danger' 
+                                      : item.stockActual <= item.stockMinimo * 2
+                                      ? 'bg-warning' 
+                                      : 'bg-success'
+                                  }`}
+                                >
+                                  {item.stockActual <= item.stockMinimo 
+                                    ? 'Crítico' 
+                                    : item.stockActual <= item.stockMinimo * 2
+                                    ? 'Bajo' 
+                                    : 'Normal'
+                                  }
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <p className="text-muted text-center">Sin datos de stock</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
         </>
       )}
 
@@ -334,9 +512,165 @@ export default function Admin() {
           className="btn btn-outline-primary"
           onClick={loadDashboardData}
         >
-          🔄 Actualizar Dashboard
+           Actualizar Dashboard
         </button>
       </div>
+    </div>
+  );
+
+  const renderCategorias = () => (
+    <div>
+      <div 
+        className="row mb-4 p-3 rounded"
+        style={{ backgroundColor: "#FFF5E1" }}
+      >
+        <div className="col-12 text-center">
+          <h2 
+            className="mb-2"
+            style={{ color: "#8B4513", fontFamily: "Pacifico, cursive" }}
+          >
+            Administrar Categorias
+          </h2>
+          <p className="text-muted">Gestiona las categorías de tus productos</p>
+        </div>
+      </div>
+
+      <section className="mb-4">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h4 className="text-secondary">Lista de Categorías</h4>
+          <button 
+            className="btn btn-primary"
+            onClick={openCreateCategoryModal}
+            style={{ backgroundColor: "#8B4513", borderColor: "#8B4513" }}
+          >
+            Nueva Categoria
+          </button>
+        </div>
+
+        {categoryLoading ? (
+          <div className="text-center">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Cargando categorías...</span>
+            </div>
+          </div>
+        ) : (
+          <div className="table-responsive">
+            <table className="table table-hover bg-white">
+              <thead className="table-light">
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Estado</th>
+                  <th className="text-end">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {categorias.map(categoria => (
+                  <tr key={categoria.id}>
+                    <td>{categoria.id}</td>
+                    <td><strong>{categoria.nombre}</strong></td>
+                    <td>{categoria.descripcion || 'Sin descripción'}</td>
+                    <td>
+                      <span 
+                        className={`badge ${categoria.activa ? 'bg-success' : 'bg-secondary'}`}
+                      >
+                        {categoria.activa ? 'Activa' : 'Inactiva'}
+                      </span>
+                    </td>
+                    <td className="text-end">
+                      <button 
+                        className="btn btn-sm btn-outline-primary me-2" 
+                        onClick={() => editarCategoria(categoria)}
+                        title="Editar categoría"
+                      >
+                        <i className="fas fa-edit"></i>
+                      </button>
+                      <button 
+                        className={`btn btn-sm ${categoria.activa ? 'btn-outline-warning' : 'btn-outline-success'}`}
+                        onClick={() => toggleCategoryStatus(categoria)}
+                        title={categoria.activa ? 'Desactivar' : 'Activar'}
+                      >
+                        <i className={`fas ${categoria.activa ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {categorias.length === 0 && (
+                  <tr>
+                    <td colSpan="5" className="text-muted text-center">
+                      No hay categorías registradas
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
+      {/* Modal para crear/editar categoría */}
+      {showCategoryModal && (
+        <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">
+                  {categoryEditId ? 'Editar Categoría' : 'Nueva Categoría'}
+                </h5>
+                <button 
+                  type="button" 
+                  className="btn-close" 
+                  onClick={closeCategoryModal}
+                ></button>
+              </div>
+              <form onSubmit={onCategorySubmit}>
+                <div className="modal-body">
+                  <div className="mb-3">
+                    <label className="form-label">Nombre *</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="nombre"
+                      value={categoryForm.nombre}
+                      onChange={onCategoryChange}
+                      required
+                      placeholder="Ej: Postres, Bebidas, etc."
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Descripción</label>
+                    <textarea
+                      className="form-control"
+                      name="descripcion"
+                      value={categoryForm.descripcion}
+                      onChange={onCategoryChange}
+                      rows="3"
+                      placeholder="Descripción opcional de la categoría"
+                    />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button 
+                    type="button" 
+                    className="btn btn-secondary" 
+                    onClick={closeCategoryModal}
+                  >
+                    Cancelar
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="btn btn-primary"
+                    style={{ backgroundColor: "#8B4513", borderColor: "#8B4513" }}
+                  >
+                    {categoryEditId ? 'Actualizar' : 'Crear'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 
@@ -345,7 +679,7 @@ export default function Admin() {
       {/* Header de gestión de productos */}
       <header className="text-center mb-4">
         <h1 style={{ fontFamily: "'Pacifico', cursive", color: "#8B4513" }}>
-          🛠️ Gestión de Productos
+          Gestion de Productos
         </h1>
         <p className="lead">Crear, editar y eliminar productos</p>
       </header>
@@ -383,9 +717,13 @@ export default function Admin() {
               onChange={onChange}
             >
               <option value="">Seleccione una categoría</option>
-              <option value="1">Chocolate</option>
-              <option value="2">Vainilla</option>
-              <option value="3">Frutilla</option>
+              {categorias
+                .filter(categoria => categoria.activa)
+                .map(categoria => (
+                  <option key={categoria.id} value={categoria.id}>
+                    {categoria.nombre}
+                  </option>
+                ))}
             </select>
           </div>
 
@@ -409,6 +747,32 @@ export default function Admin() {
               value={form.precio}
               onChange={onChange}
               required
+            />
+          </div>
+
+          <div className="col-md-3">
+            <label className="form-label fw-bold">Stock</label>
+            <input
+              type="number"
+              min="0"
+              className="form-control"
+              name="stock"
+              value={form.stock}
+              onChange={onChange}
+              required
+            />
+          </div>
+
+          <div className="col-md-3">
+            <label className="form-label fw-bold">Stock Crítico</label>
+            <input
+              type="number"
+              min="0"
+              className="form-control"
+              name="stockCritico"
+              value={form.stockCritico}
+              onChange={onChange}
+              placeholder="5"
             />
           </div>
 
@@ -453,6 +817,8 @@ export default function Admin() {
               <th>Nombre</th>
               <th>Descripción</th>
               <th>Precio</th>
+              <th>Stock</th>
+              <th>Stock Crítico</th>
               <th>Categoría</th>
               <th>Destacado</th>
               <th className="text-end">Acciones</th>
@@ -464,8 +830,14 @@ export default function Admin() {
                 <td><strong>{p.nombre}</strong></td>
                 <td>{p.descripcion}</td>
                 <td>${p.precio.toLocaleString("es-CL")}</td>
+                <td>
+                  <span className={`badge ${p.stock <= (p.stockCritico || 5) ? 'bg-danger' : 'bg-success'}`}>
+                    {p.stock || 0}
+                  </span>
+                </td>
+                <td>{p.stockCritico || 5}</td>
                 <td>{p.categoria?.nombre || 'Sin categoría'}</td>
-                <td>{p.destacado ? '⭐' : ''}</td>
+                <td>{p.destacado ? 'Destacado' : ''}</td>
                 <td className="text-end">
                   <button className="btn btn-sm btn-warning me-2" onClick={() => editar(p)}>
                     Editar
@@ -478,7 +850,7 @@ export default function Admin() {
             ))}
             {productos.length === 0 && (
               <tr>
-                <td colSpan="6" className="text-muted text-center">
+                <td colSpan="8" className="text-muted text-center">
                   No hay productos
                 </td>
               </tr>
@@ -491,6 +863,13 @@ export default function Admin() {
 
   return (
     <main className="container-fluid py-4" style={{ backgroundColor: "#FFF5E1", color: "#5D4037", fontFamily: "Lato, sans-serif" }}>
+      <header className="mb-4 text-center">
+        <h1 style={{ color: "#8B4513", fontFamily: "Pacifico, cursive" }}>
+          Panel de Administracion
+        </h1>
+        <p className="text-muted">Sistema de gestión para administradores</p>
+      </header>
+
       {/* Tabs de navegación */}
       <div className="row mb-4">
         <div className="col-12">
@@ -500,7 +879,15 @@ export default function Admin() {
                 className={`nav-link ${activeTab === 'dashboard' ? 'active' : ''}`}
                 onClick={() => setActiveTab('dashboard')}
               >
-                📊 Dashboard
+                 Dashboard
+              </button>
+            </li>
+            <li className="nav-item">
+              <button 
+                className={`nav-link ${activeTab === 'categorias' ? 'active' : ''}`}
+                onClick={() => setActiveTab('categorias')}
+              >
+                 Categorías
               </button>
             </li>
             <li className="nav-item">
@@ -508,7 +895,7 @@ export default function Admin() {
                 className={`nav-link ${activeTab === 'productos' ? 'active' : ''}`}
                 onClick={() => setActiveTab('productos')}
               >
-                🛠️ Productos
+                 Productos
               </button>
             </li>
           </ul>
@@ -517,6 +904,7 @@ export default function Admin() {
 
       {/* Contenido según tab activo */}
       {activeTab === 'dashboard' && renderDashboard()}
+      {activeTab === 'categorias' && renderCategorias()}
       {activeTab === 'productos' && renderProductos()}
     </main>
   );

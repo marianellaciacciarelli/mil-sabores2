@@ -18,7 +18,7 @@ const InicioSesion = () => {
     try {
       const response = await authAPI.login(email, password);
       
-      setMensaje("🎉 ¡Inicio de sesión exitoso! Bienvenido a Pastelería 1000 Sabores 🍰");
+      setMensaje("¡Inicio de sesión exitoso! Bienvenido a Pastelería 1000 Sabores");
       
       // Redirigir al home después de 1 segundo
       setTimeout(() => {
@@ -27,7 +27,7 @@ const InicioSesion = () => {
       
     } catch (error) {
       console.error('Error en login:', error);
-      setMensaje("❌ Usuario o contraseña incorrectos, inténtalo nuevamente.");
+      setMensaje("Usuario o contraseña incorrectos, inténtalo nuevamente.");
       setTimeout(() => setMensaje(""), 3000);
     } finally {
       setLoading(false);
@@ -58,7 +58,7 @@ const InicioSesion = () => {
             color: "#B84E24",
           }}
         >
-          Iniciar Sesión 🍰
+          Iniciar Sesion
         </h2>
 
         <form onSubmit={handleSubmit}>

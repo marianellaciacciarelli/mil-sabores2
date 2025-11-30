@@ -10,7 +10,7 @@ const CompraFallida = () => {
         minHeight: "100vh",
         backgroundColor: "#FFF5E1",
         backgroundImage:
-          "url('https://i.pinimg.com/originals/7b/64/57/7b64572cf6e4cfd7aabf3e7b9600b3a8.jpg')", // ✅ nuevo fondo pastel cupcakes
+          "url('https://i.pinimg.com/originals/7b/64/57/7b64572cf6e4cfd7aabf3e7b9600b3a8.jpg')", // nuevo fondo pastel cupcakes
         backgroundRepeat: "repeat",
         backgroundSize: "300px",
         fontFamily: "'Lato', sans-serif",
@@ -32,22 +32,26 @@ const CompraFallida = () => {
             fontFamily: "'Pacifico', cursive",
           }}
         >
-          ⚠️ Compra fallida
+          ⚠️
+ Compra fallida
         </h1>
 
         <p style={{ color: "#5D4037", fontSize: "18px" }}>
-          La tarjeta ingresada está <strong>vencida</strong> o no es válida.  
+          La tarjeta ingresada está <strong>vencida</strong> o no es válida.
           Por favor revisa la fecha de vencimiento o utiliza otra tarjeta para continuar.
         </p>
 
         <div className="mt-4">
           <Link to="/checkout" className="btn btn-warning px-4">
-            🔁 Volver a intentar
+            🔁
+ Volver a intentar
           </Link>
         </div>
 
         <footer className="mt-4" style={{ color: "#8B4E24" }}>
-          ❤️ Pastelería 1000 Sabores — endulzando momentos desde 1975 ❤️
+          ❤️
+ Pastelería 1000 Sabores — endulzando momentos desde 1975 ❤️
+
         </footer>
       </div>
     </main>

@@ -20,12 +20,12 @@ export const MisCompras = () => {
       const response = await ordersAPI.getMyOrders();
       setOrders(response);
     } catch (error) {
-      console.error('Error al cargar las órdenes:', error);
+      console.error('Error al cargar las 贸rdenes:', error);
       
       if (error.response?.status === 401) {
-        setError('Debe iniciar sesión para ver sus compras');
+        setError('Debe iniciar sesi贸n para ver sus compras');
       } else {
-        setError('Error al cargar las órdenes. Intente nuevamente.');
+        setError('Error al cargar las 贸rdenes. Intente nuevamente.');
       }
     } finally {
       setLoading(false);
@@ -34,11 +34,11 @@ export const MisCompras = () => {
 
   const getStatusBadge = (status) => {
     const statusConfig = {
-      PENDIENTE: { class: 'warning', text: 'Pendiente', icon: '⏳' },
-      PAGADA: { class: 'success', text: 'Pagada', icon: '✅' },
-      ENVIADA: { class: 'info', text: 'Enviada', icon: '📦' },
-      ENTREGADA: { class: 'primary', text: 'Entregada', icon: '🎉' },
-      CANCELADA: { class: 'danger', text: 'Cancelada', icon: '❌' }
+      PENDIENTE: { class: 'warning', text: 'Pendiente', icon: '' },
+      PAGADA: { class: 'success', text: 'Pagada', icon: '' },
+      ENVIADA: { class: 'info', text: 'Enviada', icon: '' },
+      ENTREGADA: { class: 'primary', text: 'Entregada', icon: '' },
+      CANCELADA: { class: 'danger', text: 'Cancelada', icon: '' }
     };
 
     const config = statusConfig[status] || statusConfig.PENDIENTE;
@@ -60,6 +60,7 @@ export const MisCompras = () => {
         minute: '2-digit'
       });
     } catch (error) {
+      console.error(error)
       return dateString;
     }
   };
@@ -94,7 +95,7 @@ export const MisCompras = () => {
                Intentar nuevamente
             </button>
             <Link to="/login" className="btn btn-outline-secondary">
-               Iniciar sesión
+               Iniciar sesi贸n
             </Link>
           </div>
         </div>
@@ -114,18 +115,18 @@ export const MisCompras = () => {
               className="mb-2" 
               style={{ color: '#8B4513', fontFamily: 'Pacifico, cursive' }}
             >
-              🛒 Mis Compras
+              Mis Compras
             </h2>
-            <p className="text-muted">Historial de todas tus órdenes</p>
+            <p className="text-muted">Historial de todas tus 贸rdenes</p>
           </div>
 
           {orders.length === 0 ? (
             <div className="text-center">
               <div className="alert alert-info" role="alert">
-                <h4>📝 Sin compras registradas</h4>
-                <p>Aún no has realizado ninguna compra.</p>
+                <h4>馃摑 Sin compras registradas</h4>
+                <p>A煤n no has realizado ninguna compra.</p>
                 <Link to="/catalogo" className="btn btn-primary">
-                  🛍️ Explorar productos
+                  Explorar productos
                 </Link>
               </div>
             </div>
@@ -138,7 +139,7 @@ export const MisCompras = () => {
                       <div className="row align-items-center">
                         <div className="col">
                           <h6 className="mb-0">
-                            📄 Orden #{order.id}
+                            馃搫 Orden #{order.id}
                           </h6>
                           <small className="text-muted">
                             {formatDate(order.fechaVenta)}
@@ -151,19 +152,19 @@ export const MisCompras = () => {
                     </div>
 
                     <div className="card-body">
-                      {/* Información del cliente */}
+                      {/* Informaci贸n del cliente */}
                       <div className="mb-3">
                         <h6 className="text-muted">Cliente:</h6>
                         <p className="mb-1">{order.nombreCliente}</p>
                         {order.emailCliente && (
-                          <small className="text-muted">📧 {order.emailCliente}</small>
+                          <small className="text-muted">馃摟 {order.emailCliente}</small>
                         )}
                       </div>
 
-                      {/* Dirección de envío */}
+                      {/* Direcci贸n de env铆o */}
                       {order.direccionEnvio && (
                         <div className="mb-3">
-                          <h6 className="text-muted">Dirección de envío:</h6>
+                          <h6 className="text-muted">Direcci贸n de env铆o:</h6>
                           <p className="small">{order.direccionEnvio}</p>
                         </div>
                       )}
@@ -197,11 +198,11 @@ export const MisCompras = () => {
                         <div>
                           {order.estado === 'ENTREGADA' && (
                             <button className="btn btn-outline-success btn-sm me-2">
-                              ⭐ Calificar
+                              Calificar
                             </button>
                           )}
                           <button className="btn btn-outline-primary btn-sm">
-                            📋 Detalles
+                            Detalles
                           </button>
                         </div>
                       </div>
@@ -212,10 +213,10 @@ export const MisCompras = () => {
             </div>
           )}
 
-          {/* Botón para volver */}
+          {/* Bot贸n para volver */}
           <div className="text-center mt-4">
             <Link to="/" className="btn btn-outline-primary">
-              🏠 Volver al inicio
+              馃彔 Volver al inicio
             </Link>
           </div>
         </div>

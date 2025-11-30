@@ -5,12 +5,17 @@ import { Outlet } from 'react-router-dom'
 
 export const Layout = () => {
   return (
-    <div className="app">              {/* 👈 contenedor flex de toda la app */}
-      <Navbar />
-      <main className="page-content">  {/* 👈 ocupa el espacio disponible */}
+    <div className="app">             
+ 
+      <header>
+        <Navbar />
+      </header>
+      <main className="page-content">  
         <Outlet />
       </main>
-      <Footer />
+      <footer>
+        <Footer />
+      </footer>
     </div>
   )
 }
