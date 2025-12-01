@@ -3,8 +3,14 @@ import { useState, useEffect } from "react";
 import { reportsAPI } from "../api/reports";
 import { categoriesAPI } from "../api/categories";
 import axios from "axios";
+import { useState, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+import { reportsAPI } from "../api/reports";
+import { categoriesAPI } from "../api/categories";
+import axios from "axios";
 
 export default function Admin() {
+  // const navigate = useNavigate();
   // const navigate = useNavigate();
 
   // Estado para el dashboard
@@ -62,6 +68,8 @@ export default function Admin() {
   useEffect(() => {
     if (activeTab === 'categorias') {
       loadCategories();
+    if (activeTab === 'categorias') {
+      loadCategories();
     }
   }, [activeTab]);
 
@@ -110,8 +118,14 @@ export default function Admin() {
       ...f,
       [name]: type === "checkbox" ? checked : (name === "precio" ? Number(value) : value)
     }));
+    const { name, value, type, checked } = e.target;
+    setForm(f => ({
+      ...f,
+      [name]: type === "checkbox" ? checked : (name === "precio" ? Number(value) : value)
+    }));
   };
 
+  const onSubmit = async (e) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!form.nombre || !form.precio) return;
@@ -562,6 +576,9 @@ export default function Admin() {
         <h1 style={{ fontFamily: "'Pacifico', cursive", color: "#8B4513" }}>
           Gestion de Productos
         </h1>
+        <h1 style={{ fontFamily: "'Pacifico', cursive", color: "#8B4513" }}>
+          Gestion de Productos
+        </h1>
         <p className="lead">Crear, editar y eliminar productos</p>
       </header>
 
@@ -606,7 +623,44 @@ export default function Admin() {
                   </option>
                 ))}
             </select>
+            <input
+              className="form-control"
+              name="nombre"
+              value={form.nombre}
+              onChange={onChange}
+              required
+            />
           </div>
+
+          <div className="col-md-4">
+            <label className="form-label fw-bold">Ruta Imagen</label>
+            <input
+              className="form-control"
+              name="rutaImagen"
+              value={form.rutaImagen}
+              onChange={onChange}
+            />
+          </div>
+
+          <div className="col-md-4">
+            <label className="form-label fw-bold">Categoría</label>
+            <select
+              className="form-control"
+              name="categoriaId"
+              value={form.categoriaId}
+              onChange={onChange}
+            >
+              <option value="">Seleccione una categoría</option>
+              {categorias
+                .filter(categoria => categoria.activa)
+                .map(categoria => (
+                  <option key={categoria.id} value={categoria.id}>
+                    {categoria.nombre}
+                  </option>
+                ))}
+            </select>
+          </div>
+
 
           <div className="col-md-5">
             <label className="form-label fw-bold">Descripción</label>
@@ -616,7 +670,14 @@ export default function Admin() {
               value={form.descripcion}
               onChange={onChange}
             />
+            <input
+              className="form-control"
+              name="descripcion"
+              value={form.descripcion}
+              onChange={onChange}
+            />
           </div>
+
 
           <div className="col-md-3">
             <label className="form-label fw-bold">Precio</label>
@@ -676,10 +737,22 @@ export default function Admin() {
           style={{ backgroundColor: "#8B4513", color: "#fff", borderRadius: 8 }}
           type="submit"
         >
+
+        <button
+          className="btn mt-3"
+          style={{ backgroundColor: "#8B4513", color: "#fff", borderRadius: 8 }}
+          type="submit"
+        >
           {editId ? "Guardar cambios" : "Agregar producto"}
         </button>
 
+
         {editId && (
+          <button
+            className="btn btn-outline-secondary mt-3 ms-2"
+            type="button"
+            onClick={cancelar}
+          >
           <button
             className="btn btn-outline-secondary mt-3 ms-2"
             type="button"
@@ -691,10 +764,19 @@ export default function Admin() {
       </form>
 
       {/* Tabla de productos */}
+      {/* Tabla de productos */}
       <section className="table-responsive">
         <table className="table align-middle bg-white shadow-sm">
           <thead>
             <tr>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Stock Crítico</th>
+              <th>Categoría</th>
+              <th>Destacado</th>
+              <th className="text-end">Acciones</th>
               <th>Nombre</th>
               <th>Descripción</th>
               <th>Precio</th>
@@ -719,7 +801,21 @@ export default function Admin() {
                 <td>{p.stockCritico || 5}</td>
                 <td>{p.categoria?.nombre || 'Sin categoría'}</td>
                 <td>{p.destacado ? 'Destacado' : ''}</td>
+                <td>
+                  <span className={`badge ${p.stock <= (p.stockCritico || 5) ? 'bg-danger' : 'bg-success'}`}>
+                    {p.stock || 0}
+                  </span>
+                </td>
+                <td>{p.stockCritico || 5}</td>
+                <td>{p.categoria?.nombre || 'Sin categoría'}</td>
+                <td>{p.destacado ? 'Destacado' : ''}</td>
                 <td className="text-end">
+                  <button className="btn btn-sm btn-warning me-2" onClick={() => editar(p)}>
+                    Editar
+                  </button>
+                  <button className="btn btn-sm btn-danger" onClick={() => eliminar(p.id)}>
+                    Eliminar
+                  </button>
                   <button className="btn btn-sm btn-warning me-2" onClick={() => editar(p)}>
                     Editar
                   </button>
@@ -735,10 +831,63 @@ export default function Admin() {
                   No hay productos
                 </td>
               </tr>
+              <tr>
+                <td colSpan="8" className="text-muted text-center">
+                  No hay productos
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
       </section>
+    </div>
+  );
+
+  return (
+    <main className="container-fluid py-4" style={{ backgroundColor: "#FFF5E1", color: "#5D4037", fontFamily: "Lato, sans-serif" }}>
+      <header className="mb-4 text-center">
+        <h1 style={{ color: "#8B4513", fontFamily: "Pacifico, cursive" }}>
+          Panel de Administracion
+        </h1>
+        <p className="text-muted">Sistema de gestión para administradores</p>
+      </header>
+
+      {/* Tabs de navegación */}
+      <div className="row mb-4">
+        <div className="col-12">
+          <ul className="nav nav-pills justify-content-center">
+            <li className="nav-item">
+              <button 
+                className={`nav-link ${activeTab === 'dashboard' ? 'active' : ''}`}
+                onClick={() => setActiveTab('dashboard')}
+              >
+                 Dashboard
+              </button>
+            </li>
+            <li className="nav-item">
+              <button 
+                className={`nav-link ${activeTab === 'categorias' ? 'active' : ''}`}
+                onClick={() => setActiveTab('categorias')}
+              >
+                 Categorías
+              </button>
+            </li>
+            <li className="nav-item">
+              <button 
+                className={`nav-link ${activeTab === 'productos' ? 'active' : ''}`}
+                onClick={() => setActiveTab('productos')}
+              >
+                 Productos
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Contenido según tab activo */}
+      {activeTab === 'dashboard' && renderDashboard()}
+      {activeTab === 'categorias' && renderCategorias()}
+      {activeTab === 'productos' && renderProductos()}
     </div>
   );
 
