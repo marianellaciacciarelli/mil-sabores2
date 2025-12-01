@@ -5,7 +5,6 @@ import  Home from '../pages/Home'
 import { Error404 } from '../pages/Error404'
 import Contacto from '../pages/Contacto'
 import  Login  from '../pages/Login'
-import { Catalogo } from '../pages/Catalogo'
 import { Nosotros } from '../pages/Nosotros'
 
 import { Carrito } from '../pages/Carrito'
