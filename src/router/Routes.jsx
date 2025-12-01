@@ -5,7 +5,6 @@ import  Home from '../pages/Home'
 import { Error404 } from '../pages/Error404'
 import Contacto from '../pages/Contacto'
 import  Login  from '../pages/Login'
-import { Catalogo } from '../pages/Catalogo'
 import { Nosotros } from '../pages/Nosotros'
 
 import { Carrito } from '../pages/Carrito'
@@ -18,6 +17,7 @@ import Ofertas from '../pages/Ofertas'
 import InicioSesion from '../pages/InicioSesion'
 import CompraFallida from '../pages/CompraFallida'
 import Admin from "../pages/Admin"
+import MisCompras from '../pages/MisCompras'
 
 import RegistroUsuario from '../pages/RegistroUsuario.jsx';
 
@@ -34,8 +34,8 @@ export const RoutesComp = () => {
                         <Route path='/' element={<Navigate to='/home' />} /> {/*Cada vez que se entra a la raíz redirige a Home*/}
                         <Route path='/home' element={<Home />} />
                         <Route path='/contacto' element={<Contacto />} />
-                        <Route path='/login' element={<Login />} />
-                        <Route path='/catalogo' element={<Catalogo />} />
+                        <Route path='/login' element={<InicioSesion />} />
+                        <Route path='/catalogo' element={<Productos />} />
                         <Route path='/nosotros' element={<Nosotros />} />
                        <Route path="/registroUsuario" element={<RegistroUsuario />} />
 
@@ -49,6 +49,7 @@ export const RoutesComp = () => {
                         <Route path="/inicioSesion" element={<InicioSesion />} />
                         <Route path="/compraFallida" element={<CompraFallida />} />
                         <Route path="/admin" element={<Admin />} />
+                        <Route path="/mis-compras" element={<MisCompras />} />
 
                         
                     </Route>

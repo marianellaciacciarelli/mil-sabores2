@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ navegación SPA
+import { useNavigate } from "react-router-dom"; // navegacion SPA
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Login = () => {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState("");
-  const navigate = useNavigate(); // ✅ hook de React Router
+  const navigate = useNavigate(); // hook de React Router
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -43,7 +43,7 @@ const Login = () => {
           className="text-center mb-4"
           style={{ fontFamily: "'Pacifico', cursive", color: "#B84E24" }}
         >
-          Iniciar Sesión 🍰
+          Iniciar Sesion
         </h2>
 
         <form onSubmit={handleSubmit}>
