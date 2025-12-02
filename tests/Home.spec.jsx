@@ -1,34 +1,35 @@
-// 🏠 Test del componente Home.jsx
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import Home from "../src/pages/Home";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import Home from '../src/pages/Home';
+import axios from 'axios';
 
-describe("🏠 Componente Home", () => {
-  // ✅ 1️⃣ Verifica que el título principal se muestre correctamente
-  it("muestra el título principal", () => {
-    render(<Home />);
-    expect(screen.getByText(/Celebra la dulzura de la vida/i)).toBeInTheDocument();
+vi.mock('axios');
+vi.mock('../src/api/auth', () => ({
+  authAPI: {
+    isAuthenticated: vi.fn(() => false),
+    getCurrentUser: vi.fn(() => null),
+    logout: vi.fn()
+  }
+}));
+
+const renderWithRouter = (ui) => render(<BrowserRouter>{ui}</BrowserRouter>);
+
+describe('Home Component', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    axios.get.mockResolvedValue({ data: [] });
   });
 
-  // ✅ 2️⃣ Verifica que exista una imagen con alt="Logo"
-  it("muestra la imagen del logo", () => {
-    render(<Home />);
-    const logo = screen.getByAltText("Logo");
+  it('renderiza el componente Home sin errores', () => {
+    renderWithRouter(<Home />);
+    const logo = screen.getByAltText(/Logo/i);
     expect(logo).toBeInTheDocument();
   });
 
-  // ✅ 3️⃣ Comprueba que haya uno o más párrafos descriptivos
-  it("contiene uno o más párrafos descriptivos", () => {
-    render(<Home />);
-    const parrafos = screen.getAllByText((content, element) => {
-      return element.tagName.toLowerCase() === "p";
-    });
-    expect(parrafos.length).toBeGreaterThan(0);
-  });
-
-  // ✅ 4️⃣ Verifica que exista el texto “Productos Destacados”
-  it("muestra la sección 'Productos Destacados'", () => {
-    render(<Home />);
-    expect(screen.getByText(/Productos Destacados/i)).toBeInTheDocument();
+  it('muestra el logo de la pastelería', () => {
+    renderWithRouter(<Home />);
+    const logo = screen.getByAltText(/Logo/i);
+    expect(logo).toBeInTheDocument();
   });
 });

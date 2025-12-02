@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import Ofertas from '../src/pages/Ofertas';
+import Productos from '../src/pages/Productos';
 
 vi.mock('axios', () => ({
   default: {
@@ -11,16 +11,16 @@ vi.mock('axios', () => ({
 
 const renderWithRouter = (ui) => render(<BrowserRouter>{ui}</BrowserRouter>);
 
-describe('Ofertas Component', () => {
-  it('renderiza la página de ofertas', () => {
-    renderWithRouter(<Ofertas />);
+describe('Productos Component', () => {
+  it('renderiza la página de productos', () => {
+    renderWithRouter(<Productos />);
     const container = document.body;
     expect(container).toBeTruthy();
   });
 
-  it('muestra contenido relacionado con ofertas', () => {
-    renderWithRouter(<Ofertas />);
-    const allElements = document.querySelectorAll('*');
-    expect(allElements.length).toBeGreaterThan(0);
+  it('muestra el contenido de productos', () => {
+    renderWithRouter(<Productos />);
+    const elements = document.querySelectorAll('div');
+    expect(elements.length).toBeGreaterThan(0);
   });
 });

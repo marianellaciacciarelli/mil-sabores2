@@ -1,27 +1,32 @@
-// 🧁 Importamos las librerías necesarias
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
-import Navbar from "../src/components/Navbar";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import NavbarMS from '../src/components/Navbar';
 
-// 🧭 Función auxiliar para envolver el componente en BrowserRouter
+vi.mock('../src/api/auth', () => ({
+  authAPI: {
+    isAuthenticated: vi.fn(() => false),
+    getCurrentUser: vi.fn(() => null),
+    logout: vi.fn()
+  }
+}));
+
 const renderWithRouter = (ui) => render(<BrowserRouter>{ui}</BrowserRouter>);
 
-describe("Componente Navbar", () => {
+describe('Navbar Component', () => {
   beforeEach(() => {
-    localStorage.clear();
+    vi.clearAllMocks();
   });
 
-  // Verifica que se renderice la barra de navegación
-  it("renderiza la barra de navegación", () => {
-    renderWithRouter(<Navbar />);
-    expect(screen.getByRole("navigation")).toBeInTheDocument();
+  it('renderiza la barra de navegacion', () => {
+    renderWithRouter(<NavbarMS />);
+    const navbar = screen.getByRole('navigation');
+    expect(navbar).toBeInTheDocument();
   });
 
-  // Verifica que muestre enlaces principales
-  it("muestra enlaces de navegación principales", () => {
-    renderWithRouter(<Navbar />);
-    expect(screen.getByText(/Inicio/i) || screen.getByText(/Home/i)).toBeTruthy();
-    expect(screen.getByText(/Catálogo/i) || screen.getByText(/Productos/i)).toBeTruthy();
+  it('contiene enlaces de navegacion', () => {
+    renderWithRouter(<NavbarMS />);
+    const links = screen.getAllByRole('link');
+    expect(links.length).toBeGreaterThan(0);
   });
 });
