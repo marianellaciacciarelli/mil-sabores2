@@ -20,12 +20,12 @@ export const MisCompras = () => {
       const response = await ordersAPI.getMyOrders();
       setOrders(response);
     } catch (error) {
-      console.error('Error al cargar las 贸rdenes:', error);
+      console.error('Error al cargar las ordenes:', error);
       
       if (error.response?.status === 401) {
-        setError('Debe iniciar sesi贸n para ver sus compras');
+        setError('Debe iniciar sesión para ver sus compras');
       } else {
-        setError('Error al cargar las 贸rdenes. Intente nuevamente.');
+        setError('Error al cargar las ordenes. Intente nuevamente.');
       }
     } finally {
       setLoading(false);
@@ -92,10 +92,10 @@ export const MisCompras = () => {
           <hr />
           <div className="d-flex justify-content-center gap-2">
             <button className="btn btn-primary" onClick={loadUserOrders}>
-               Intentar nuevamente
+              Intentar nuevamente
             </button>
             <Link to="/login" className="btn btn-outline-secondary">
-               Iniciar sesi贸n
+              Iniciar sesión
             </Link>
           </div>
         </div>
@@ -117,14 +117,14 @@ export const MisCompras = () => {
             >
               Mis Compras
             </h2>
-            <p className="text-muted">Historial de todas tus 贸rdenes</p>
+            <p className="text-muted">Historial de todas tus órdenes</p>
           </div>
 
           {orders.length === 0 ? (
             <div className="text-center">
               <div className="alert alert-info" role="alert">
-                <h4>馃摑 Sin compras registradas</h4>
-                <p>A煤n no has realizado ninguna compra.</p>
+                <h4>Sin compras registradas</h4>
+                <p>Aún no has realizado ninguna compra.</p>
                 <Link to="/catalogo" className="btn btn-primary">
                   Explorar productos
                 </Link>
@@ -139,10 +139,10 @@ export const MisCompras = () => {
                       <div className="row align-items-center">
                         <div className="col">
                           <h6 className="mb-0">
-                            馃搫 Orden #{order.id}
+                            Orden #{order.id}
                           </h6>
                           <small className="text-muted">
-                            {formatDate(order.fechaVenta)}
+                            {formatDate(order.fecha)}
                           </small>
                         </div>
                         <div className="col-auto">
@@ -152,19 +152,17 @@ export const MisCompras = () => {
                     </div>
 
                     <div className="card-body">
-                      {/* Informaci贸n del cliente */}
                       <div className="mb-3">
                         <h6 className="text-muted">Cliente:</h6>
                         <p className="mb-1">{order.nombreCliente}</p>
                         {order.emailCliente && (
-                          <small className="text-muted">馃摟 {order.emailCliente}</small>
+                          <small className="text-muted">{order.emailCliente}</small>
                         )}
                       </div>
 
-                      {/* Direcci贸n de env铆o */}
                       {order.direccionEnvio && (
                         <div className="mb-3">
-                          <h6 className="text-muted">Direcci贸n de env铆o:</h6>
+                          <h6 className="text-muted">Dirección de envío:</h6>
                           <p className="small">{order.direccionEnvio}</p>
                         </div>
                       )}
@@ -177,11 +175,11 @@ export const MisCompras = () => {
                             {order.detalles.map((detalle, index) => (
                               <li key={index} className="small d-flex justify-content-between">
                                 <span>
-                                  {detalle.producto?.nombre || `Producto ID: ${detalle.productoId}`} 
+                                  {detalle.nombreProducto || `Producto ID: ${detalle.productoId}`} 
                                   <span className="text-muted"> (x{detalle.cantidad})</span>
                                 </span>
                                 <span>
-                                  {formatCurrency(detalle.precio * detalle.cantidad)}
+                                  {formatCurrency(detalle.precioUnitario * detalle.cantidad)}
                                 </span>
                               </li>
                             ))}
@@ -201,9 +199,7 @@ export const MisCompras = () => {
                               Calificar
                             </button>
                           )}
-                          <button className="btn btn-outline-primary btn-sm">
-                            Detalles
-                          </button>
+                   
                         </div>
                       </div>
                     </div>
@@ -213,10 +209,9 @@ export const MisCompras = () => {
             </div>
           )}
 
-          {/* Bot贸n para volver */}
           <div className="text-center mt-4">
             <Link to="/" className="btn btn-outline-primary">
-              馃彔 Volver al inicio
+              Volver al inicio
             </Link>
           </div>
         </div>

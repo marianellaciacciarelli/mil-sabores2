@@ -14,7 +14,7 @@ export default function Home() {
   // Aquí hacemos la petición al backend para traer los productos destacados
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/v1/productos/destacados")  // LLAMADA A LA API REAL
+      .get("http://44.213.57.93:8080/api/v1/productos/destacados")  // LLAMADA A LA API REAL
       .then((res) => {
         console.log("Destacados recibidos:", res.data); // Mostrar la respuesta en consola
         setDestacados(res.data); // Guardamos los productos en el estado

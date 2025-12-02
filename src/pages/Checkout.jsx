@@ -99,14 +99,20 @@ export const Checkout = () => {
       console.error('Error al procesar la compra:', error);
       
       if (error.response?.status === 409) {
-        setError('Stock insuficiente para uno o más productos');
+        const message = error.response?.data?.message || 'Stock insuficiente para uno o más productos';
+        setError(`Error 409: ${message}`);
       } else if (error.response?.status === 404) {
-        setError('Uno o más productos ya no están disponibles');
+        const message = error.response?.data?.message || 'Uno o más productos ya no están disponibles';
+        setError(`Error 404: ${message}`);
       } else if (error.response?.status === 401) {
         setError('Debe iniciar sesión para realizar una compra');
         navigate('/login');
+      } else if (error.response?.status === 400) {
+        const message = error.response?.data?.message || 'Datos de la orden inválidos';
+        setError(`Error 400: ${message}`);
       } else {
-        setError('Error al procesar la compra. Intente nuevamente.');
+        const message = error.response?.data?.message || 'Error desconocido';
+        setError(`Error al procesar la compra: ${message}`);
       }
     } finally {
       setLoading(false);

@@ -9,7 +9,7 @@ const Productos = () => {
   // Cargar productos reales desde API
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/v1/productos")
+      .get("http://44.213.57.93:8080/api/v1/productos")
       .then((res) => {
         console.log("Productos cargados:", res.data); // DEBUG
         setProductos(res.data);

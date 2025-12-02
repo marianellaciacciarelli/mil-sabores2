@@ -5,7 +5,6 @@ import  Home from '../pages/Home'
 import { Error404 } from '../pages/Error404'
 import Contacto from '../pages/Contacto'
 import  Login  from '../pages/Login'
-import { Catalogo } from '../pages/Catalogo'
 import { Nosotros } from '../pages/Nosotros'
 
 import { Carrito } from '../pages/Carrito'
@@ -19,6 +18,7 @@ import InicioSesion from '../pages/InicioSesion'
 import CompraFallida from '../pages/CompraFallida'
 import Admin from "../pages/Admin"
 import MisCompras from '../pages/MisCompras'
+import AdminRoute from '../components/AdminRoute'
 
 import RegistroUsuario from '../pages/RegistroUsuario.jsx';
 
@@ -49,7 +49,7 @@ export const RoutesComp = () => {
                         <Route path="/ofertas" element={<Ofertas />} />
                         <Route path="/inicioSesion" element={<InicioSesion />} />
                         <Route path="/compraFallida" element={<CompraFallida />} />
-                        <Route path="/admin" element={<Admin />} />
+                        <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
                         <Route path="/mis-compras" element={<MisCompras />} />
 
                         
