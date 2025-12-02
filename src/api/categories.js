@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api/v1/categorias';
+const API_URL = 'http://44.213.57.93:8080/api/v1/categorias';
 
 // Configurar interceptor para agregar token a todas las peticiones
 axios.interceptors.request.use(

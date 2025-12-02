@@ -54,9 +54,6 @@ export default function RegistroUsuario() {
       setLoading(true);
       setError("");
       
-      console.log('=== ENVIANDO PETICIÓN AL SERVIDOR ===');
-      console.log('URL:', 'http://localhost:8082/api/v1/auth/register');
-
       try {
         // Llamar a la API de registro
         const response = await authAPI.register({

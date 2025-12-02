@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8084/api/v1/reports';
+const API_URL = 'http://44.213.57.93:8084/api/v1/reports';
 
 // Interceptor para agregar JWT automáticamente
 const getAuthHeaders = () => {

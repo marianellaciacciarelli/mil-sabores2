@@ -18,6 +18,7 @@ import InicioSesion from '../pages/InicioSesion'
 import CompraFallida from '../pages/CompraFallida'
 import Admin from "../pages/Admin"
 import MisCompras from '../pages/MisCompras'
+import AdminRoute from '../components/AdminRoute'
 
 import RegistroUsuario from '../pages/RegistroUsuario.jsx';
 
@@ -48,7 +49,7 @@ export const RoutesComp = () => {
                         <Route path="/ofertas" element={<Ofertas />} />
                         <Route path="/inicioSesion" element={<InicioSesion />} />
                         <Route path="/compraFallida" element={<CompraFallida />} />
-                        <Route path="/admin" element={<Admin />} />
+                        <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
                         <Route path="/mis-compras" element={<MisCompras />} />
 
                         

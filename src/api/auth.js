@@ -1,6 +1,6 @@
 import axios from 'axios'; //"axios" libería para hacer peticiones HTTP 
 
-const API_URL = 'http://localhost:8082/api/v1/auth';
+const API_URL = 'http://44.213.57.93:8082/api/v1/auth';  
 
 // Función para decodificar JWT sin verificar la firma (solo para extraer datos)
 const decodeJWT = (token) => {
